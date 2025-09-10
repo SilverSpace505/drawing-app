@@ -41,5 +41,5 @@ function draw() { // Using 'event' as an argument is redundant, but it removes t
         ctx.stroke()
     };
 };
-setInterval(draw, 1000/60) // Rhys helped with this bit. It helped because it allows the 'draw()' function to run while the mouse position is being updated.
+setInterval(draw, 0) // Rhys helped with this bit. It helped because it allows the 'draw()' function to run while the mouse position is being updated.
 // HENRY CODE ENDS HERE
