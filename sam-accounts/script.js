@@ -7,6 +7,11 @@ function signUp() {
 }
 
 function addAccount() {
+    if (!username.value || !password.value || !confirmPW.value) {
+        console.log('didnt fill it in')
+        return
+    }
+    console.log('adding')
     if (password.value != confirmPW.value) {
         console.log('the password doesnt match')
     }
