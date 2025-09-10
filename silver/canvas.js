@@ -4,13 +4,14 @@ const ctx = canvas.getContext("2d");
 
 canvas.onclick = function(event) {
     if (event.which == 1) { //Detects if it is left click
-        draw()
-    }
-}
+        draw(event);
+    };
+};
 
-function draw() {
+function draw(event) {
     ctx.fillStyle = "red";
-ctx.fillRect(0, 0, 150, 75);
-}
+    ctx.fillRect(event.clientX, event.clientY, 1, 1);
+    console.log(this.value=event.clientX+':'+event.clientY); //I just copied this from docs, I have no clue what 'this' or 'event' is.
+};
 
 // HENRY CODE ENDS HERE
