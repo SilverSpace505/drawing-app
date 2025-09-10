@@ -8,6 +8,10 @@ canvas.onclick = function(event) {
     };
 };
 
+canvas.webkitMatchesSelector(mouseDown) {
+    
+}
+
 function draw(event) {
     ctx.fillStyle = "red";
     ctx.fillRect(event.clientX, event.clientY, 1, 1);
