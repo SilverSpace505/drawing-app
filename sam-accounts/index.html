@@ -11,16 +11,16 @@
     <form id="signUpContainer">
         <br>
         <br>
-            Username: <br><input class="userInput" autocomplete="username" required id="signUpUsername">
-            <br>
-            <br>
-            Password: <br><input class="userInput" type="password" autocomplete="current-password" required id="signUpPassword">
-            <br>
-            <br>
-            Confirm Password: <br><input class="userInput" type="password" autocomplete="current-password" required id="signUpConfirm">
-            <br>
-            <br>
-        <button id="signUpConfirmBtn" class="signUpBtn" onclick="addAccount()">Sign Up</button>
+        Username: <br><input class="userInput" autocomplete="username" minlength="3" required id="signUpUsername">
+        <br>
+        <br>
+        Password: <br><input class="userInput" type="password" autocomplete="current-password" minlength="5" required id="signUpPassword">
+        <br>
+        <br>
+        Confirm Password: <br><input class="userInput" type="password" autocomplete="current-password" minlength="5" id="signUpConfirm">
+        <br>
+        <br>
+        <button id="signUpConfirmBtn" class="signUpBtn" onclick="addAccount()" type="button">Sign Up</button>
     </form>
     <script src="script.js"></script>
 </body>
