@@ -1,0 +1,27 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
+    <title>Accounts</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button id="signUp" onclick="signUp()" class="signUpBtn">Sign Up</button>
+    <form id="signUpContainer">
+        <br>
+        <br>
+            Username: <br><input class="userInput" autocomplete="username" required id="signUpUsername">
+            <br>
+            <br>
+            Password: <br><input class="userInput" type="password" autocomplete="current-password" required id="signUpPassword">
+            <br>
+            <br>
+            Confirm Password: <br><input class="userInput" type="password" autocomplete="current-password" required id="signUpConfirm">
+            <br>
+            <br>
+        <button id="signUpConfirmBtn" class="signUpBtn" onclick="addAccount()">Sign Up</button>
+    </form>
+    <script src="script.js"></script>
+</body>
+</html>
