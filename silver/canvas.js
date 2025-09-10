@@ -4,10 +4,13 @@ const ctx = canvas.getContext("2d");
 
 canvas.onclick = function(event) {
     if (event.which == 1) { //Detects if it is left click
-        console.log("asdhui")
+        draw()
     }
 }
 
-ctx.fillStyle = "red";
+function draw() {
+    ctx.fillStyle = "red";
 ctx.fillRect(0, 0, 150, 75);
+}
+
 // HENRY CODE ENDS HERE
