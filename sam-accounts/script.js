@@ -7,7 +7,13 @@ function signUp() {
 }
 
 function addAccount() {
-    if (!username.value || !password.value || !confirmPW.value) {
+    if (!username.value || 
+        !password.value || 
+        !confirmPW.value || 
+        password.value.length < 5 ||
+        confirmPW.value.length < 5 ||
+        username.value.length < 3
+    ) {
         console.log('didnt fill it in')
         return
     }
