@@ -59,3 +59,10 @@ downloadBtn.onclick = async() => {
   // console.log(data)
   load(data[0].data)
 }
+
+const emailDisplay = document.getElementById('emailDisplay');
+
+(async() => {
+  const {data, error} = await client.auth.getUser()
+  emailDisplay.textContent = 'User: ' + data.user.email
+})()
