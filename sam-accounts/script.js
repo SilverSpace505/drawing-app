@@ -58,7 +58,15 @@ async function createAccount(email, password) {
     email,
     password,
   })
+  
   console.log(data, error)
+  if (error && error.code == "user_already_exists") {
+    console.log('You already have an account! Signing in...')
+    login(email, password)
+  }
+  else {
+    console.log('Account created!', data.user)
+  }
 }
 
 (async() => {
@@ -69,8 +77,9 @@ async function createAccount(email, password) {
   //   email: 'example@email.com',
   //   password: 'example-password',
   // })
-
-  await createAccount('verycool@e', 'sigma123')
+    const {data, error} = await client.auth.getUser()
+    console.log(data.user)
+    if (!data.user) await createAccount('BigMAN123@a.co', 'sigma123')
 
   // await login('example@email.com', 'example-password')
 
