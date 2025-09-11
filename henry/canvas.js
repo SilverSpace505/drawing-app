@@ -6,8 +6,7 @@ const ctx = canvas.getContext("2d");
 
 var drawing = false;
 var size = 1;
-var last10Inputs // PLACEHOLDER
-var last10Undos // PLACEHOLDER
+var redoStorage;
 
 // Line start position x, line start position y, line end position x, line end position y, colour, size
 var canvasData = [];
@@ -28,7 +27,13 @@ document.addEventListener("keydown", detectCharacter); // Detects when a key is 
 function detectCharacter(character) { // Is called when a key is pressed down
     if (character.ctrlKey == true) { //Is the control key pressed?
         if (character.key == "z") { // Is the "z" key pressed?
-            console.log("undo") // PLACEHOLDER
+            // console.log(canvasData)
+            // canvasData.splice(canvasData.length - 1, 1)
+            // console.log(canvasData)
+            canvasData.splice(canvasData.lastIndexOf("RELEASE"), 1)
+            canvasData.splice(canvasData.lastIndexOf("RELEASE"), canvasData.length - 1 - canvasData.lastIndexOf("RELEASE"))
+            console.log(canvasData.lastIndexOf("RELEASE"))
+            load(JSON.stringify(canvasData));
         }
         else if (character.key == "y") { // Is the "y" key pressed?
             console.log("redo") // PLACEHOLDER
@@ -36,7 +41,7 @@ function detectCharacter(character) { // Is called when a key is pressed down
     }
 }
 
-canvas.onmousedown = function(event) { // This is called when the mouse is pressed. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
+canvas.onmousedown = function(event) { // This is called when the mouse is pressed on the canvas. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
     if (event.which == 1) { // Detects if it is left click
         drawing = true;
         draw();
@@ -46,6 +51,7 @@ canvas.onmousedown = function(event) { // This is called when the mouse is press
 onmouseup = function(event) { // This is called when the mouse is released. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
     if (event.which == 1) { // Detects if it is left click
         drawing = false;
+        canvasData.push("RELEASE")
     };
 };
 
@@ -72,19 +78,15 @@ function load(data) { //THERE WILL BE AN ARGUMENT HERE
     data = JSON.parse(data)
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (var i = 0; i < data.length; i++) {
-        ctx.beginPath();
-        ctx.moveTo(data[i][0], data[i][1]);
-        ctx.lineTo(data[i][2], data[i][3]);
-        ctx.lineWidth = data[i][4];
-        ctx.strokeStyle = data[i][5];
-        ctx.stroke();
+        if (data[i] != "RELEASE") {
+            ctx.beginPath();
+            ctx.moveTo(data[i][0], data[i][1]);
+            ctx.lineTo(data[i][2], data[i][3]);
+            ctx.lineWidth = data[i][4];
+            ctx.strokeStyle = data[i][5];
+            ctx.stroke();
+        }
     };
 };
 
 // HENRY CODE ENDS HERE
-
-// RHYS CODE STARTS HERE
-
-
-
-// RHYS CODE ENDS HERE
