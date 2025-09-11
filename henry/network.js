@@ -14,27 +14,6 @@ async function createDrawing(name, data, description = null) {
   console.log(data2, error)
 }
 
-async function logout() {
-  const { error } = await client.auth.signOut()
-  console.log(error)
-}
-
-async function login(email, password) {
-  const { data2, error2 } = await client.auth.signInWithPassword({
-    email,
-    password
-  })
-  console.log(data2, error2)
-}
-
-async function createAccount(email, password) {
-  const {data, error} = await client.auth.signUp({
-    email,
-    password,
-  })
-  console.log(data, error)
-}
-
 const uploadBtn = document.getElementById('uploadBtn')
 const uploadName = document.getElementById('uploadName')
 const uploadDescription = document.getElementById('uploadDescription')
@@ -47,19 +26,19 @@ const downloadBtn = document.getElementById('downloadBtn')
 const downloadName = document.getElementById('downloadName')
 
 downloadBtn.onclick = async() => {
-  const { data, error } = await client
+  const { data } = await client
   .from('drawings')
   .select("*")
 
   // Filters
   .eq('name', downloadName.value)
-  // console.log(data)
+
   load(data[0].data)
 }
 
 const emailDisplay = document.getElementById('emailDisplay');
 
 (async() => {
-  const {data, error} = await client.auth.getUser()
+  const {data} = await client.auth.getUser()
   emailDisplay.textContent = 'User: ' + data.user.email
 })()
