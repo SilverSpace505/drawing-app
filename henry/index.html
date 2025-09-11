@@ -8,7 +8,16 @@
 
     </style> -->
     <body>
-        <canvas id="canvas" width="1800" height="968" style="border:1px solid black;"></canvas> <!-- The drawing area -->
+        <canvas id="canvas" width="1800" height="968" style="position:fixed; left:12px; top:100px; border:1px solid black;"></canvas> <!-- The drawing area -->
+
+        <label for="brushColour">Colour:</label>
+        <input type="color" id="brushColour" value="#000000">
+        
+        <div class="">
+            <input type="range" min="1" max="10" value="1" class="slider" id="brushSize">
+        </div>
+
+        <link rel="stylesheet" href="style.css"> 
         <script src="canvas.js"></script>
 
     </body>
