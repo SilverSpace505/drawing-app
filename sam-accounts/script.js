@@ -4,16 +4,17 @@ const confirmPW = document.getElementById('signUpConfirm')
 const accName = document.getElementById('accountName')
 const name2 = document.getElementById('logInUsername')
 const pw2 = document.getElementById('logInPassword')
-
+const signUpForm = document.getElementById('signUpContainer')
+const logInForm = document.getElementById('logInContainer')
 
 let user = null;
 
 function signUp() {
-    document.getElementById('signUpContainer').style.top = '15%'
+    signUpForm.style.top = '15%'
 }
 
 function logMeIn() {
-    document.getElementById('logInContainer').style.top = '15%'
+    logInForm.style.top = '15%'
 }
 
 function addAccount() {
@@ -31,6 +32,7 @@ function addAccount() {
     }
 
     createAccount(username.value, password.value)
+    signUpForm.style.top = '100%'
 }
 
 function loginHTML() {
@@ -40,6 +42,7 @@ function loginHTML() {
     }
 
     login(name2.value, pw2.value)
+    logInForm.style.top = '100%'
 }
 
 
