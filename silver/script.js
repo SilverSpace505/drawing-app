@@ -21,8 +21,8 @@ async function logout() {
 
 async function login(email, password) {
   const { data2, error2 } = await client.auth.signInWithPassword({
-    email: 'example@email.com',
-    password: 'example-password',
+    email,
+    password
   })
   console.log(data2, error2)
 }
