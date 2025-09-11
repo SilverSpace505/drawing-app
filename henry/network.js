@@ -35,22 +35,27 @@ async function createAccount(email, password) {
   console.log(data, error)
 }
 
-(async() => {
-  // const {data, error} = await client.from('users').select()
-  // console.log(data, error)
+const uploadBtn = document.getElementById('uploadBtn')
+const uploadName = document.getElementById('uploadName')
+const uploadDescription = document.getElementById('uploadDescription')
 
-  // const { silly, silly2 } = await client.auth.signUp({
-  //   email: 'example@email.com',
-  //   password: 'example-password',
-  // })
+uploadBtn.onclick = async () => {
+  const {data, error} = await client.auth.getUser()
+  console.log(data, error)
+  return
+  createDrawing(uploadName.value, save(), uploadDescription.value)
+}
 
-  await createAccount('veryecool@e', 'sigmaa')
+const downloadBtn = document.getElementById('downloadBtn')
+const downloadName = document.getElementById('downloadName')
 
-  // await login('example@email.com', 'example-password')
+downloadBtn.onclick = async() => {
+  const { data, error } = await client
+  .from('drawings')
+  .select("*")
 
-  // await logout();
-
-  // console.log(data2, error2)
-  // createDrawing()
-})()
-
+  // Filters
+  .eq('name', downloadName.value)
+  // console.log(data)
+  load(data[0].data)
+}

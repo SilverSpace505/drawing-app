@@ -1,18 +1,26 @@
 const username = document.getElementById('signUpUsername')
 const password = document.getElementById('signUpPassword')
 const confirmPW = document.getElementById('signUpConfirm')
+const accName = document.getElementById('accountName')
+const name2 = document.getElementById('logInUsername')
+const pw2 = document.getElementById('logInPassword')
+const signUpForm = document.getElementById('signUpContainer')
+const logInForm = document.getElementById('logInContainer')
+
+let user = null;
 
 function signUp() {
-    document.getElementById('signUpContainer').style.top = '15%'
+    signUpForm.style.top = '15%'
+}
+
+function logMeIn() {
+    logInForm.style.top = '15%'
 }
 
 function addAccount() {
     if (!username.value || 
         !password.value || 
-        !confirmPW.value || 
-        password.value.length < 5 ||
-        confirmPW.value.length < 5 ||
-        username.value.length < 3
+        !confirmPW.value
     ) {
         console.log('didnt fill it in')
         return
@@ -20,7 +28,21 @@ function addAccount() {
     console.log('adding')
     if (password.value != confirmPW.value) {
         console.log('the password doesnt match')
+        return
     }
+
+    createAccount(username.value, password.value)
+    signUpForm.style.top = '100%'
+}
+
+function loginHTML() {
+    if (!name2.value || !pw2.value) {
+        console.log('didnt fill it in')
+        return
+    }
+
+    login(name2.value, pw2.value)
+    logInForm.style.top = '100%'
 }
 
 
@@ -43,6 +65,7 @@ async function createDrawing() {
 async function logout() {
   const { error } = await client.auth.signOut()
   console.log(error)
+  accName.innerText = 'Not Signed In'
 }
 
 async function login(email, password) {
@@ -51,6 +74,9 @@ async function login(email, password) {
     password
   })
   console.log(data2, error2)
+  const {data, error} = await client.auth.getUser()
+  console.log(data, error)
+  updateUI(data)
 }
 
 async function createAccount(email, password) {
@@ -65,8 +91,14 @@ async function createAccount(email, password) {
     login(email, password)
   }
   else {
-    console.log('Account created!', data.user)
+    updateUI(data)
   }
+}
+
+function updateUI(data) {
+    if (!data) return;
+    user = data.user
+    if (user) accName.innerText = user.email
 }
 
 (async() => {
@@ -78,8 +110,9 @@ async function createAccount(email, password) {
   //   password: 'example-password',
   // })
     const {data, error} = await client.auth.getUser()
-    console.log(data.user)
-    if (!data.user) await createAccount('BigMAN123@a.co', 'sigma123')
+    updateUI(data)
+    //if (!user) await createAccount('BigMAN123@a.co', 'sigma123')
+    //else accName.innerText = user.email
 
   // await login('example@email.com', 'example-password')
 
