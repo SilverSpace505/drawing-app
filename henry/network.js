@@ -40,9 +40,6 @@ const uploadName = document.getElementById('uploadName')
 const uploadDescription = document.getElementById('uploadDescription')
 
 uploadBtn.onclick = async () => {
-  const {data, error} = await client.auth.getUser()
-  console.log(data, error)
-  return
   createDrawing(uploadName.value, save(), uploadDescription.value)
 }
 
