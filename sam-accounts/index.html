@@ -8,21 +8,35 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+    <div id="accountName">Not Signed In</div>
     <button id="signUp" onclick="signUp()" class="signUpBtn">Sign Up</button>
     <form id="signUpContainer">
         <br>
         <br>
-        Username: <br><input class="userInput" autocomplete="username" minlength="3" required id="signUpUsername">
+        Email: <br><input class="userInput" autocomplete="username" required id="signUpUsername">
         <br>
         <br>
-        Password: <br><input class="userInput" type="password" autocomplete="current-password" minlength="5" required id="signUpPassword">
+        Password: <br><input class="userInput" type="password" autocomplete="current-password" required id="signUpPassword">
         <br>
         <br>
-        Confirm Password: <br><input class="userInput" type="password" autocomplete="current-password" minlength="5" id="signUpConfirm">
+        Confirm Password: <br><input class="userInput" type="password" autocomplete="current-password" id="signUpConfirm">
         <br>
         <br>
         <button id="signUpConfirmBtn" class="signUpBtn" onclick="addAccount()" type="button">Sign Up</button>
     </form>
+    <form id="logInContainer">
+        <br>
+        <br>
+        Email: <br><input class="userInput" autocomplete="username" required id="logInUsername">
+        <br>
+        <br>
+        Password: <br><input class="userInput" type="password" autocomplete="current-password" required id="logInPassword">
+        <br>
+        <br>
+        <button id="logInConfirmBtn" class="signUpBtn" onclick="loginHTML()" type="button">Log In</button>
+    </form>
+    <button id="loginBtn" class="signUpBtn" onclick="logMeIn()" type="button">Log In</button>
+    <button id="logoutBtn" class="signUpBtn" onclick="logout()" type="button">Log Out</button>
     <script src="script.js"></script>
 </body>
 </html>
