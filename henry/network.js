@@ -41,4 +41,16 @@ const emailDisplay = document.getElementById('emailDisplay');
 (async() => {
   const {data} = await client.auth.getUser()
   emailDisplay.textContent = 'User: ' + data.user?.email
+
+  let params = new URLSearchParams(document.location.search);
+  let loadId = params.get("load");
+
+  if (loadId) {
+    const { data } = await client
+    .from('drawings')
+    .select("*")
+    .eq('id', loadId)
+    
+    if (data) load(data[0].data)
+  }
 })()
