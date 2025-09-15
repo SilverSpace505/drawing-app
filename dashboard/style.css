@@ -1,0 +1,39 @@
+
+body {
+  margin: 0;
+}
+
+#topbar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  border-bottom: 5px black solid;
+  height: 60px;
+}
+
+#pfp {
+  width: 50px;
+  height: 50px;
+  background-color: red;
+}
+
+#title {
+  position: relative;
+  left: 20px;
+}
+
+#right-topbar {
+  position: absolute;
+  right: 20px;
+  align-items: center;
+  display: flex;
+}
+
+#right-topbar * {
+  margin-left: 20px;
+}
+
+#content {
+  padding: 10px;
+}
