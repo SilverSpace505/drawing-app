@@ -32,21 +32,30 @@ document.addEventListener("keydown", detectCharacter); // Detects when a key is 
 function detectCharacter(character) { // Is called when a key is pressed down
     if (character.ctrlKey == true) { //Is the control key pressed?
         if (character.key == "z") { // Is the "z" key pressed?
+            var redone = []
             canvasData.splice(canvasData.lastIndexOf("RELEASE"), 1) // Removes the most recent 'RELEASE' so 2nd canvasData splice detects the 2nd most recent 'RELEASE' from the data
             for (var i = 0; i < canvasData.length - canvasData.lastIndexOf("RELEASE"); i++) {
-                redoStorage.push(canvasData[i + canvasData.lastIndexOf("RELEASE")]) // Pushes all of the data which is about to be removed from the master to redoStorage in a single index
+                // redoStorage.push(canvasData[i + canvasData.lastIndexOf("RELEASE")]) // Pushes all of the data which is about to be removed from the master to redoStorage in a single index
+                redone.push(canvasData[i + canvasData.lastIndexOf("RELEASE")])
             }
             // redoStorage.push("RELEASE")
             canvasData.splice(canvasData.lastIndexOf("RELEASE") + 1, canvasData.length - canvasData.lastIndexOf("RELEASE")) // Removes everything up to the most recent 'RELEASE' from the data
+            redoStorage.push(redone)
             load(JSON.stringify(canvasData)); // Loads the canvas, now with everything up to the 2nd most recent 'RELEASE' deleted.
         }
         else if (character.key == "y" && redoStorage.length > 1) { // Is the "y" key pressed?
             console.log(canvasData)
             // redoStorage.splice(redoStorage.lastIndexOf("RELEASE"), 1)
-            for (var i = 0; i < redoStorage.length - redoStorage.lastIndexOf("RELEASE"); i++) {
-                canvasData.push(redoStorage[i])
+            // for (var i = 0; i < redoStorage.length - redoStorage.lastIndexOf("RELEASE"); i++) {
+            //     canvasData.push(redoStorage[i])
+            // }
+            for (var i = 0; i < redoStorage[redoStorage.length - 1].length; 1++) {
+                
             }
-            redoStorage.splice(redoStorage.lastIndexOf("RELEASE") + 1, redoStorage.length - redoStorage.lastIndexOf("RELEASE")) // Removes everything up to the most recent 'RELEASE' from the data
+            canvasData.push(redoStorage[redoStorage.length - 1])
+            redoStorage.splice(redoStorage.length - 1, 1)
+            // redoStorage.splice(redoStorage.lastIndexOf("RELEASE") + 1, redoStorage.length - redoStorage.lastIndexOf("RELEASE")) // Removes everything up to the most recent 'RELEASE' from the data
+            
             // redoStorage.pop()
             load(JSON.stringify(canvasData)); // Loads the canvas, now with the 'redone' data added
             console.log(canvasData)
