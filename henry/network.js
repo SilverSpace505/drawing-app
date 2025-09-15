@@ -40,5 +40,5 @@ const emailDisplay = document.getElementById('emailDisplay');
 
 (async() => {
   const {data} = await client.auth.getUser()
-  emailDisplay.textContent = 'User: ' + data.user.email
+  emailDisplay.textContent = 'User: ' + data.user?.email
 })()
