@@ -57,12 +57,7 @@ onmouseup = function(event) { // This is called when the mouse is released. 'eve
 
 function draw() { // Using 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
     if (drawing == true) {
-        ctx.beginPath(); // These 4 lines draw a line on the canvas. Is is better to use lines rather than points because the framerate is capped at 60, leading to
-        // gaps in the mouse position updating.
-        ctx.moveTo(lastMouseX, lastMouseY);
-        ctx.lineTo(mouseX, mouseY);
-        ctx.lineWidth = brushSize.value;
-        ctx.strokeStyle = brushColour.value;
+        ctx.beginPath(); // These 4 lines draw a line on the canvas. Is is better to use lines rather than points because the framerate is capped at 60, leading to gaps in the mouse position updating.
         ctx.stroke();
         canvasData.push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value])
     };
