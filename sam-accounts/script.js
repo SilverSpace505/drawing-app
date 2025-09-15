@@ -142,5 +142,6 @@ async function getName(id) {
   }
   console.log(data, data[0])
   profileData = data[0];
+  console.log(data[0].description)
   return data[0].name
 }
