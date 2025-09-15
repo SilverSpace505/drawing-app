@@ -14,7 +14,8 @@ var size = 1;
 var redoStorage = [];
 
 // Line start position x, line start position y, line end position x, line end position y, colour, size
-var canvasData = ["RELEASE"];
+var canvasData = [];
+var canvasDataBreaks = 0;
 
 var mouseX;
 var mouseY;
@@ -33,19 +34,18 @@ function detectCharacter(character) { // Is called when a key is pressed down
     if (character.ctrlKey == true) { //Is the control key pressed?
         if (character.key == "z") { // Is the 'z' key pressed?
             var redone = []; // The thing that is being undone
-            canvasData.splice(canvasData.lastIndexOf("RELEASE"), 1) // Removes the most recent 'RELEASE' so 2nd canvasData splice detects the 2nd most recent 'RELEASE' from the data
             for (var i = 0; i < canvasData.length - canvasData.lastIndexOf("RELEASE"); i++) {
-                redone.push(canvasData[i + canvasData.lastIndexOf("RELEASE")]); // Pushes all of the data which is about to be removed from 'canvasData' to 'redone'
+                redone.push(canvasData[canvasDataBreaks]); // Pushes all of the data which is about to be removed from 'canvasData' to 'redone'
             };
-            canvasData.splice(canvasData.lastIndexOf("RELEASE") + 1, canvasData.length - canvasData.lastIndexOf("RELEASE")); // Removes everything up to the most recent 'RELEASE' from the data
+            canvasData.splice(canvasDataBreaks); // Removes everything up to the most recent 'RELEASE' from the data
             redoStorage.push(redone); // Pushing 'redone' into 'redoStorage' puts all of the data in a single index, which makes it easier to handle
+            canvasDataBreaks -= 1;
             load(JSON.stringify(canvasData)); // Loads the canvas, now with everything up to the 2nd most recent 'RELEASE' deleted
         }
         else if (character.key == "y") { // Is the 'y' key pressed?
-            for (var i = 0; i < redoStorage[redoStorage.length - 1].length; i++) { // Repeats for the length of 'redone'
-                canvasData.push(redoStorage[(redoStorage.length - 1)][i]); // Pushes every index of 'redone' into 'canvasData'
-            };
+            canvasData.push(redoStorage[(redoStorage.length - 1)]); // Pushes every index of 'redone' into 'canvasData'
             redoStorage.splice(redoStorage.length - 1, 1); // Removes 'redone' from 'redoStorage'
+            canvasDataBreaks += 1
             load(JSON.stringify(canvasData)); // Loads the canvas, now with the 'redone' data added
         };
     };
@@ -61,7 +61,7 @@ canvas.onmousedown = function(event) { // This is called when the mouse is press
 onmouseup = function(event) { // This is called when the mouse is released. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
     if (event.button == 0) { // Detects if it is left click
         drawing = false;
-        canvasData.push("RELEASE") // Done to detect when the user releases the mouse, so that 'ctrl + z' is able to detect when the mouse was last released.
+        canvasDataBreaks += 1; // Done to detect when the user releases the mouse, so that 'ctrl + z' is able to detect when the mouse was last released.
     };
 };
 
@@ -73,7 +73,7 @@ function draw() { // Using 'event' as an argument is redundant, but it removes t
         ctx.lineWidth = brushSize.value; // Width of the line
         ctx.strokeStyle = brushColour.value; // Colour of the line
         ctx.stroke();
-        canvasData.push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]) // Pushes the line parameters to the data for saving/loading
+        canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]) // Pushes the line parameters to the data for saving/loading
     };
 };
 setInterval(draw, 0); // Rhys helped with this bit. It helped because it allows the 'draw()' function to run while the mouse position is being updated.
