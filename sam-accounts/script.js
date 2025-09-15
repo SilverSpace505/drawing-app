@@ -46,7 +46,13 @@ function loginHTML() {
     logInForm.style.top = '100%'
 }
 
+function closeSignUp() {
+  signUpForm.style.top = '100%'
+}
 
+function closeLogIn() {
+  logInForm.style.top = '100%'
+}
 
 const { createClient } = supabase;
 const supabaseUrl = 'https://hfbnrnmfhierhtlhcute.supabase.co'

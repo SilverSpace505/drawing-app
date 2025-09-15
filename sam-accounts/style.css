@@ -72,3 +72,17 @@ body {
     left: 30%;
     bottom: 50%;
 }
+
+.closeBtn {
+    position: absolute;
+    right: 5%;
+    top: 3%;
+    font-weight: bolder;
+    height: 40px;
+    width: 40px;
+    background-color: red;
+    border-radius: 5px;
+    font-size: 100%;
+    text-align: center;
+    margin: 0;
+}
