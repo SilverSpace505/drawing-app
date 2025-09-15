@@ -100,4 +100,4 @@ function load(data) { // 'data' is a parameter which is handled by Rhys' code
 };
 
 // HENRY CODE ENDS HERE
-document.addEventListener('contextmenu', e => e.preventDefault()) // Removes of right click menu - done by Sam
+document.addEventListener('contextmenu', e => e.preventDefault()) // Removes right click menu - done by Sam
