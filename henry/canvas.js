@@ -42,14 +42,14 @@ function detectCharacter(character) { // Is called when a key is pressed down
 }
 
 canvas.onmousedown = function(event) { // This is called when the mouse is pressed on the canvas. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
-    if (event.which == 1) { // Detects if it is left click
+    if (event.button == 0) { // Detects if it is left click
         drawing = true;
         draw();
     };
 };
 
 onmouseup = function(event) { // This is called when the mouse is released. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
-    if (event.which == 1) { // Detects if it is left click
+    if (event.button == 0) { // Detects if it is left click
         drawing = false;
         canvasData.push("RELEASE")
     };
@@ -90,3 +90,5 @@ function load(data) { //THERE WILL BE AN ARGUMENT HERE
 };
 
 // HENRY CODE ENDS HERE
+//get rid of right click menu
+document.addEventListener('contextmenu', e => e.preventDefault())

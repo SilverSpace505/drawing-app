@@ -8,6 +8,7 @@ const signUpForm = document.getElementById('signUpContainer')
 const logInForm = document.getElementById('logInContainer')
 
 let user = null;
+let profileData = null;
 
 function signUp() {
     signUpForm.style.top = '15%'
@@ -95,10 +96,12 @@ async function createAccount(email, password) {
   }
 }
 
-function updateUI(data) {
+async function updateUI(data) {
     if (!data) return;
     user = data.user
-    if (user) accName.innerText = user.email
+    if (!user) return
+    if (profileData != null) accName.innerText = profileData.name
+    else accName.innerText = await getName(user.id)
 }
 
 (async() => {
@@ -122,3 +125,16 @@ function updateUI(data) {
   // createDrawing()
 })()
 
+async function getName(id) {
+  const {data, error} = await client
+  .from('profiles')
+  .select('*') //get all columns
+  .eq('id', id)
+  if (error) {
+    console.log(error)
+    return;
+  }
+  console.log(data, data[0])
+  profileData = data[0];
+  return data[0].name
+}
