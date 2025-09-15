@@ -31,37 +31,25 @@ document.addEventListener('mousemove', function(event) { // Detects when the mou
 document.addEventListener("keydown", detectCharacter); // Detects when a key is pressed down
 function detectCharacter(character) { // Is called when a key is pressed down
     if (character.ctrlKey == true) { //Is the control key pressed?
-        if (character.key == "z") { // Is the "z" key pressed?
-            var redone = []
+        if (character.key == "z") { // Is the 'z' key pressed?
+            var redone = []; // The thing that is being undone
             canvasData.splice(canvasData.lastIndexOf("RELEASE"), 1) // Removes the most recent 'RELEASE' so 2nd canvasData splice detects the 2nd most recent 'RELEASE' from the data
             for (var i = 0; i < canvasData.length - canvasData.lastIndexOf("RELEASE"); i++) {
-                // redoStorage.push(canvasData[i + canvasData.lastIndexOf("RELEASE")]) // Pushes all of the data which is about to be removed from the master to redoStorage in a single index
-                redone.push(canvasData[i + canvasData.lastIndexOf("RELEASE")])
-            }
-            // redoStorage.push("RELEASE")
-            canvasData.splice(canvasData.lastIndexOf("RELEASE") + 1, canvasData.length - canvasData.lastIndexOf("RELEASE")) // Removes everything up to the most recent 'RELEASE' from the data
-            redoStorage.push(redone)
-            load(JSON.stringify(canvasData)); // Loads the canvas, now with everything up to the 2nd most recent 'RELEASE' deleted.
+                redone.push(canvasData[i + canvasData.lastIndexOf("RELEASE")]); // Pushes all of the data which is about to be removed from 'canvasData' to 'redone'
+            };
+            canvasData.splice(canvasData.lastIndexOf("RELEASE") + 1, canvasData.length - canvasData.lastIndexOf("RELEASE")); // Removes everything up to the most recent 'RELEASE' from the data
+            redoStorage.push(redone); // Pushing 'redone' into 'redoStorage' puts all of the data in a single index, which makes it easier to handle
+            load(JSON.stringify(canvasData)); // Loads the canvas, now with everything up to the 2nd most recent 'RELEASE' deleted
         }
-        else if (character.key == "y" && redoStorage.length > 1) { // Is the "y" key pressed?
-            console.log(canvasData)
-            // redoStorage.splice(redoStorage.lastIndexOf("RELEASE"), 1)
-            // for (var i = 0; i < redoStorage.length - redoStorage.lastIndexOf("RELEASE"); i++) {
-            //     canvasData.push(redoStorage[i])
-            // }
-            for (var i = 0; i < redoStorage[redoStorage.length - 1].length; 1++) {
-                
-            }
-            canvasData.push(redoStorage[redoStorage.length - 1])
-            redoStorage.splice(redoStorage.length - 1, 1)
-            // redoStorage.splice(redoStorage.lastIndexOf("RELEASE") + 1, redoStorage.length - redoStorage.lastIndexOf("RELEASE")) // Removes everything up to the most recent 'RELEASE' from the data
-            
-            // redoStorage.pop()
+        else if (character.key == "y") { // Is the 'y' key pressed?
+            for (var i = 0; i < redoStorage[redoStorage.length - 1].length; i++) { // Repeats for the length of 'redone'
+                canvasData.push(redoStorage[(redoStorage.length - 1)][i]); // Pushes every index of 'redone' into 'canvasData'
+            };
+            redoStorage.splice(redoStorage.length - 1, 1); // Removes 'redone' from 'redoStorage'
             load(JSON.stringify(canvasData)); // Loads the canvas, now with the 'redone' data added
-            console.log(canvasData)
-        }
-    }
-}
+        };
+    };
+};
 
 canvas.onmousedown = function(event) { // This is called when the mouse is pressed on the canvas. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
     if (event.button == 0) { // Detects if it is left click
@@ -97,6 +85,7 @@ function save() {
 
 function load(data) { // 'data' is a parameter which is handled by Rhys' code
     data = JSON.parse(data)
+    canvasData = data
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clears the canvas
     for (var i = 0; i < data.length; i++) {
         if (data[i] != "RELEASE") { // Redraws each line one by one with the same parameters as before
@@ -111,5 +100,4 @@ function load(data) { // 'data' is a parameter which is handled by Rhys' code
 };
 
 // HENRY CODE ENDS HERE
-//get rid of right click menu
-document.addEventListener('contextmenu', e => e.preventDefault())
+document.addEventListener('contextmenu', e => e.preventDefault()) // Removes of right click menu - done by Sam
