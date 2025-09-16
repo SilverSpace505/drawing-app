@@ -21,6 +21,8 @@ async function getName(id) {
     return;
   }
 
+  if (!data || !data[0]) return 'No name set';
+
   if (data[0].pfp) loadPfp(data[0].pfp)
 
   return data[0].name

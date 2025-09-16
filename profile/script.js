@@ -35,7 +35,7 @@ function load(data, canvas, ctx) { // 'data' is a parameter which is handled by 
     userId = data.user.id
 
     const {data: data2, error} = await client.from('profiles').select().eq('id', userId)
-    if (data2) {
+    if (data2 && data2[0]) {
       hasProfile = true
       nameInput.value = data2[0].name
       descriptionInput.value = data2[0].description

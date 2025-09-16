@@ -141,7 +141,7 @@ async function getName(id) {
     return;
   }
   console.log(data, data[0])
+  if (!data || !data[0]) return 'No name set';
   profileData = data[0];
-  console.log(data[0].description)
   return data[0].name
 }
