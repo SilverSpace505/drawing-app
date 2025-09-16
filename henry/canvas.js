@@ -77,8 +77,8 @@ function draw() { // Using 'event' as an argument is redundant, but it removes t
         ctx.beginPath(); // These 4 lines draw a line on the canvas. Is is better to use lines rather than points because the framerate is capped at 60, leading to gaps in the mouse position updating.
         ctx.moveTo(lastMouseX, lastMouseY); // Start position for the line
         ctx.lineTo(mouseX, mouseY); // End position for the line
-        ctx.lineWidth = brushSize.value; // Width of the line
         ctx.strokeStyle = brushColour.value; // Colour of the line
+        ctx.lineWidth = brushSize.value; // Width of the line
         ctx.stroke();
         canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]) // Pushes the line parameters to the data for saving/loading
     };
@@ -100,7 +100,8 @@ function load(data) { // 'data' is a parameter which is handled by Rhys' code
                 ctx.beginPath();
                 ctx.moveTo(data[l][i][0], data[l][i][1]);
                 ctx.lineTo(data[l][i][2], data[l][i][3]);
-                ctx.lineWidth = data[l][i][4];
+                ctx.strokeStyle = data[l][i][4];
+                ctx.lineWidth = data[l][i][5];
                 ctx.strokeStyle = data[l][i][5];
                 ctx.stroke();
             }
