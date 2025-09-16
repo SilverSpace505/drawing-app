@@ -43,7 +43,7 @@ function detectCharacter(character) { // Is called when a key is pressed down
             load(JSON.stringify(canvasData)); // Loads the canvas, now with everything up to the 2nd most recent 'RELEASE' deleted
         }
         else if (character.key == "y") { // Is the 'y' key pressed?
-            canvasData.splice(canvasData.length - 2, 0, redoStorage[(redoStorage.length - 1)])
+            canvasData.splice(canvasData.length - 1, 0, redoStorage[(redoStorage.length - 1)])
             // canvasData.push(redoStorage[(redoStorage.length - 1)]); // Pushes every index of 'redone' into 'canvasData'
             redoStorage.splice(redoStorage.length - 1, 1); // Removes 'redone' from 'redoStorage'
             canvasDataBreaks += 1
@@ -62,12 +62,15 @@ canvas.onmousedown = function(event) { // This is called when the mouse is press
 onmouseup = function(event) { // This is called when the mouse is released. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
     if (event.button == 0) { // Detects if it is left click
         drawing = false;
-        canvasDataBreaks += 1; // Done to detect when the user releases the mouse, so that 'ctrl + z' is able to detect when the mouse was last released.
-        if (canvasData.length - 1 < canvasDataBreaks && canvasData[canvasData.length] != []) {
+        if (canvasData.length - 1 < canvasDataBreaks && canvasData[canvasData.length - 1] != []) {
             canvasData.push([])
         }
     };
 };
+
+canvas.onmouseup = function (event) {
+    canvasDataBreaks += 1; // Done to detect when the user releases the mouse, so that 'ctrl + z' is able to detect when the mouse was last released.
+}
 
 function draw() { // Using 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
     if (drawing == true) {
