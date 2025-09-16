@@ -92,7 +92,9 @@ function save() {
 
 function load(data) { // 'data' is a parameter which is handled by Rhys' code
     data = JSON.parse(data)
+    canvasDataBreaks = data.length - 1
     canvasData = data
+    console.log(data)
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clears the canvas
     for (var l = 0; l < data.length; l++) {
         for (var i = 0; i < data[l].length; i++) {
@@ -103,9 +105,9 @@ function load(data) { // 'data' is a parameter which is handled by Rhys' code
                 ctx.strokeStyle = data[l][i][4];
                 ctx.lineWidth = data[l][i][5];
                 ctx.stroke();
-            }
+            };
         };
-    }
+    };
 };
 
 // HENRY CODE ENDS HERE
