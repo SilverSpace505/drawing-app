@@ -38,3 +38,36 @@ body {
 #content {
   padding: 10px;
 }
+
+#drawings {
+  display: flex;
+  flex-direction: row;
+}
+
+.drawing {
+  border: 5px solid black;
+  width: 100px;
+  height: 80px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.drawing-canvas {
+  position: absolute; 
+  width: 100px;
+  height: 80px;
+}
+
+.drawing-title {
+  color: black;
+  position: relative;
+  top: 60px;
+  left: 5px;
+  font-size: 15px;
+}
+
+.drawing-description {
+  color: white;
+  position: relative;
+}

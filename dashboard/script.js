@@ -32,6 +32,21 @@ account.onclick = () => {
   window.open('../profile')
 }
 
+function load(data, canvas, ctx) { // 'data' is a parameter which is handled by Rhys' code
+    data = JSON.parse(data)
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clears the canvas
+    for (var i = 0; i < data.length; i++) {
+        if (data[i] != "RELEASE") { // Redraws each line one by one with the same parameters as before
+            ctx.beginPath();
+            ctx.moveTo(data[i][0] * (canvas.width / 1800), data[i][1] * (canvas.width / 1800));
+            ctx.lineTo(data[i][2] * (canvas.height / 968), data[i][3] * (canvas.height / 968));
+            ctx.lineWidth = data[i][4] * Math.min(canvas.width / 1800, canvas.height / 968);
+            ctx.strokeStyle = data[i][5];
+            ctx.stroke();
+        }
+    };
+};
+
 const {data} = await client.auth.getUser()
 
 if (data.user) {
@@ -43,11 +58,30 @@ if (data.user) {
 
   for (const drawing of drawings) {
     const element = document.createElement('div')
-    element.textContent = drawing.name
+    element.classList.add('drawing')
+
+    const title = document.createElement('span')
+    title.classList.add('drawing-title')
+    title.textContent = drawing.name
+
+    const description = document.createElement('span')
+    description.classList.add('drawing-description')
+    description.textContent = drawing.description
+
+    const canvas = document.createElement('canvas')
+    canvas.classList.add('drawing-canvas')
+
+    element.appendChild(canvas)
+    element.appendChild(title)
+    element.appendChild(document.createElement('br'))
+    element.appendChild(description)
+    
     drawingsContainer.appendChild(element)
 
     element.onclick = () => {
       window.open(`../henry/?load=${drawing.id}`)
     }
+
+    load(drawing.data, canvas, canvas.getContext('2d'))
   }
 }
