@@ -7,16 +7,24 @@
 </head>
 <body>
   <div id="topbar">
-    <h1 id="title">Dashboard</h1>
+    <h1 id="title">Drawing App</h1>
     <div id="right-topbar">
       <canvas id="pfp"></canvas>
-      <button id="account">Not logged in</button>
+      <button id="account"></button>
     </div>
   </div>
-  <div id="content">
+  <div id="notLoggedIn" style="display: none;">
+      <h1>You are not logged in</h1>
+      <button id="accountsBtn">Go to accounts page</button>
+  </div>
+  <div id="content" style="display: none;">
     <h2 id="drawings-title">Drawings</h2>
     <br>
     <div id="drawings"></div>
+
+    <br>
+
+    <button id="newBtn">Create new drawing</button>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="script.js"></script>
