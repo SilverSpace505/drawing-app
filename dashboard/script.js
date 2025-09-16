@@ -7,6 +7,10 @@ const client = createClient(supabaseUrl, supabaseKey);
 const pfpCanvas = document.getElementById('pfp')
 const pfpCtx = pfpCanvas.getContext('2d')
 
+const notLoggedIn = document.getElementById('notLoggedIn')
+const accountsBtn = document.getElementById('accountsBtn')
+const content = document.getElementById('content')
+
 async function getName(id) {
   const {data, error} = await client
   .from('profiles')
@@ -104,4 +108,16 @@ if (data.user) {
   const drawings = await getDrawings(data.user.id)
 
   displayDrawings(drawings, drawingsContainer)
+  content.style.display = 'block'
+} else {
+  notLoggedIn.style.display = 'block'
+}
+
+accountsBtn.onclick = () => {
+  window.open('../sam-accounts')
+}
+
+const newBtn = document.getElementById('newBtn')
+newBtn.onclick = () => {
+  window.open('../henry')
 }

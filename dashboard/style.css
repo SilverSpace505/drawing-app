@@ -17,6 +17,7 @@ body {
   width: 50px;
   height: 50px;
   border: 2px solid black;
+  border-radius: 100px;
 }
 
 #title {
@@ -35,7 +36,7 @@ body {
   margin-left: 20px;
 }
 
-#content {
+#content, #notLoggedIn {
   padding: 10px;
 }
 
@@ -45,7 +46,8 @@ body {
 }
 
 .drawing {
-  border: 5px solid black;
+  border: 3px solid black;
+  border-radius: 10px;
   width: 100px;
   height: 80px;
   margin-bottom: 10px;
