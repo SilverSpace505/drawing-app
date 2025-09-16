@@ -9,12 +9,13 @@ const brushSize = document.getElementById("brushSize");
 const canvas = document.getElementById("canvas"); // Canvas which user draws on
 const ctx = canvas.getContext("2d"); // 
 
+var tool = "pen";
 var drawing = false;
 var size = 1;
 var redoStorage = [];
 
 // Line start position x, line start position y, line end position x, line end position y, colour, size
-var canvasData = [[]]; // Stores each mouse stroke in it's own array
+var canvasData = [[]]; // Stores each mouse stroke in it's own array. The final index is always a blank array.
 var canvasDataBreaks = 0; // Variable used to control 'canvasData'
 
 var mouseX;
@@ -53,23 +54,33 @@ function detectCharacter(character) { // Is called when a key is pressed down
 
 canvas.onmousedown = function(event) { // This is called when the mouse is pressed on the canvas. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
     if (event.button == 0) { // Detects if it is left click
-        drawing = true;
-        draw();
+        if (tool == "pen") {
+            drawing = true;
+            draw();
+        }
+        else if (tool == "eraser") {
+            erase();
+        }
     };
 };
 
 onmouseup = function(event) { // This is called when the mouse is released. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
     if (event.button == 0) { // Detects if it is left click
         drawing = false;
-        if (canvasData.length - 1 < canvasDataBreaks && canvasData[canvasData.length - 1] != []) {
-            canvasData.push([])
-        }
+        if (canvasData.length - 1 < canvasDataBreaks && canvasData[canvasData.length - 1] != []) { 
+            canvasData.push([]);
+        };
     };
 };
 
 canvas.onmouseup = function (event) {
     canvasDataBreaks += 1; // Done to detect when the user releases the mouse, so that 'ctrl + z' is able to detect when the mouse was last released.
     // THERE IS A BUG HERE. Because 'canvasDataBreaks' is only added to when the mouse is released on the canvas, dragging it off the canvas and then releasing breaks undo.
+};
+
+function erase() {
+    // ctx.clearRect(mouseX, mouseY, brushSize.value, brushSize.value);
+    ctx.arc(100, 75, 50, 0, Math.PI * 2);
 }
 
 function draw() { // Using 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
