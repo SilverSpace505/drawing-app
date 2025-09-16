@@ -20,8 +20,8 @@ function load(data, canvas, ctx) { // 'data' is a parameter which is handled by 
                 ctx.beginPath();
                 ctx.moveTo(data[l][i][0] * (canvas.width / 1800), data[l][i][1] * (canvas.height / 968));
                 ctx.lineTo(data[l][i][2] * (canvas.width / 1800), data[l][i][3] * (canvas.height / 968));
-                ctx.lineWidth = data[l][i][4] * Math.min(canvas.width / 1800, canvas.height / 968);
-                ctx.strokeStyle = data[l][i][5];
+                ctx.lineWidth = data[l][i][5] * Math.min(canvas.width / 1800, canvas.height / 968);
+                ctx.strokeStyle = data[l][i][4];
                 ctx.stroke();
             }
         };
