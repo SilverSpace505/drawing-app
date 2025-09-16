@@ -102,7 +102,6 @@ function load(data) { // 'data' is a parameter which is handled by Rhys' code
                 ctx.lineTo(data[l][i][2], data[l][i][3]);
                 ctx.strokeStyle = data[l][i][4];
                 ctx.lineWidth = data[l][i][5];
-                ctx.strokeStyle = data[l][i][5];
                 ctx.stroke();
             }
         };
