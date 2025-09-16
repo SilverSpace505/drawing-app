@@ -14,7 +14,7 @@ var size = 1;
 var redoStorage = [];
 
 // Line start position x, line start position y, line end position x, line end position y, colour, size
-var canvasData = [];
+var canvasData = [[]];
 var canvasDataBreaks = 0;
 
 var mouseX;
@@ -32,18 +32,19 @@ document.addEventListener('mousemove', function(event) { // Detects when the mou
 document.addEventListener("keydown", detectCharacter); // Detects when a key is pressed down
 function detectCharacter(character) { // Is called when a key is pressed down
     if (character.ctrlKey == true) { //Is the control key pressed?
-        if (character.key == "z") { // Is the 'z' key pressed?
+        if (character.key == "z" && canvasData.length > 1) { // Is the 'z' key pressed?
             var redone = []; // The thing that is being undone
-            for (var i = 0; i < canvasData.length - canvasData.lastIndexOf("RELEASE"); i++) {
-                redone.push(canvasData[canvasDataBreaks]); // Pushes all of the data which is about to be removed from 'canvasData' to 'redone'
-            };
-            canvasData.splice(canvasDataBreaks); // Removes everything up to the most recent 'RELEASE' from the data
+            for (var i = 0; i < canvasData[canvasDataBreaks - 1].length; i++) {
+                redone.push(canvasData[canvasDataBreaks - 1][i]); // Pushes all of the data which is about to be removed from 'canvasData' to 'redone'
+            }
+            canvasData.splice(canvasDataBreaks - 1, 1); // Removes everything up to the most recent 'RELEASE' from the data
             redoStorage.push(redone); // Pushing 'redone' into 'redoStorage' puts all of the data in a single index, which makes it easier to handle
             canvasDataBreaks -= 1;
             load(JSON.stringify(canvasData)); // Loads the canvas, now with everything up to the 2nd most recent 'RELEASE' deleted
         }
         else if (character.key == "y") { // Is the 'y' key pressed?
-            canvasData.push(redoStorage[(redoStorage.length - 1)]); // Pushes every index of 'redone' into 'canvasData'
+            canvasData.splice(canvasData.length - 2, 0, redoStorage[(redoStorage.length - 1)])
+            // canvasData.push(redoStorage[(redoStorage.length - 1)]); // Pushes every index of 'redone' into 'canvasData'
             redoStorage.splice(redoStorage.length - 1, 1); // Removes 'redone' from 'redoStorage'
             canvasDataBreaks += 1
             load(JSON.stringify(canvasData)); // Loads the canvas, now with the 'redone' data added
@@ -62,6 +63,9 @@ onmouseup = function(event) { // This is called when the mouse is released. 'eve
     if (event.button == 0) { // Detects if it is left click
         drawing = false;
         canvasDataBreaks += 1; // Done to detect when the user releases the mouse, so that 'ctrl + z' is able to detect when the mouse was last released.
+        if (canvasData.length - 1 < canvasDataBreaks && canvasData[canvasData.length] != []) {
+            canvasData.push([])
+        }
     };
 };
 
@@ -87,16 +91,18 @@ function load(data) { // 'data' is a parameter which is handled by Rhys' code
     data = JSON.parse(data)
     canvasData = data
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clears the canvas
-    for (var i = 0; i < data.length; i++) {
-        if (data[i] != "RELEASE") { // Redraws each line one by one with the same parameters as before
-            ctx.beginPath();
-            ctx.moveTo(data[i][0], data[i][1]);
-            ctx.lineTo(data[i][2], data[i][3]);
-            ctx.lineWidth = data[i][4];
-            ctx.strokeStyle = data[i][5];
-            ctx.stroke();
-        }
-    };
+    for (var l = 0; l < data.length; l++) {
+        for (var i = 0; i < data[l].length; i++) {
+            if (data[i] != "RELEASE") { // Redraws each line one by one with the same parameters as before
+                ctx.beginPath();
+                ctx.moveTo(data[l][i][0], data[l][i][1]);
+                ctx.lineTo(data[l][i][2], data[l][i][3]);
+                ctx.lineWidth = data[l][i][4];
+                ctx.strokeStyle = data[l][i][5];
+                ctx.stroke();
+            }
+        };
+    }
 };
 
 // HENRY CODE ENDS HERE
