@@ -166,31 +166,43 @@ document.addEventListener('contextmenu', e => e.preventDefault()) // Removes rig
 //ChatGPT compression using pako.js library
 // Compress any JSON-serializable object
 function compressJSON(obj) {
-    // 1. Convert to JSON string
+    // 1. JSON stringify
     const jsonStr = JSON.stringify(obj);
 
-    // 2. Encode string as UTF-8 bytes
+    // 2. Encode to UTF-8
     const encoder = new TextEncoder();
     const bytes = encoder.encode(jsonStr);
 
-    // 3. Deflate (compress) the bytes
+    // 3. Compress
     const compressed = pako.deflate(bytes);
 
-    // 4. Convert to base64 for storage/transmission
-    return btoa(String.fromCharCode(...compressed));
+    // 4. Convert to Base64 safely (chunked to avoid call stack crash)
+    let binary = "";
+    const chunkSize = 0x8000; // 32KB
+    for (let i = 0; i < compressed.length; i += chunkSize) {
+        binary += String.fromCharCode.apply(
+            null,
+            compressed.subarray(i, i + chunkSize)
+        );
+    }
+    return btoa(binary);
 }
 
-// Decompress back to object
-function decompressJSON(data) {
-    // 1. Base64 → compressed bytes
-    const compressed = Uint8Array.from(atob(data), c => c.charCodeAt(0));
+function decompressJSON(base64Str) {
+    // 1. Base64 decode
+    const binary = atob(base64Str);
+    const len = binary.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
 
     // 2. Inflate (decompress)
-    const bytes = pako.inflate(compressed);
+    const decompressed = pako.inflate(bytes);
 
-    // 3. Decode UTF-8 → string
+    // 3. Decode UTF-8
     const decoder = new TextDecoder();
-    const jsonStr = decoder.decode(bytes);
+    const jsonStr = decoder.decode(decompressed);
 
     // 4. Parse JSON
     return JSON.parse(jsonStr);
