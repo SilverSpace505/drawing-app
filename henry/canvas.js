@@ -32,6 +32,15 @@ document.addEventListener('mousemove', function(event) { // Detects when the mou
     lastMouseY = mouseY; // Stores the previous mouse position
     mouseX = event.clientX - canvas.getBoundingClientRect().left; // Sets the mouse position to a variable. The mouse position is offset by the canvas position 
     mouseY = event.clientY - canvas.getBoundingClientRect().top; // because 'event.clientY' is based off of the canvas position rather than the absolute position.
+        if (tool == "pen") {
+          console.log("nfosnfoosnooooo")
+            ctx.globalCompositionOperation = "source-over"
+            draw(false);
+        }
+        else if (tool == "eraser") {
+            ctx.globalCompositionOperation = "destination-out"
+            draw(true);
+        }
 });
 
 document.addEventListener("keydown", detectCharacter); // Detects when a key is pressed down
@@ -112,7 +121,7 @@ function draw(erase) { // Using 'event' as an argument is redundant, but it remo
         canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]) // Pushes the line parameters to the data for saving/loading
     };
 };
-setInterval(draw, 0); // Rhys helped with this bit. It helped because it allows the 'draw()' function to run while the mouse position is being updated.
+// setInterval(draw, 0); // Rhys helped with this bit. It helped because it allows the 'draw()' function to run while the mouse position is being updated.
 
 // Rhys helped with the saving and loading
 function save() {

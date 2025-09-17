@@ -102,3 +102,11 @@ async function loadPfp(id) {
     if (data) load(data[0].data)
   }
 })()
+
+const loadFileBtn = document.getElementById('loadFileBtn')
+const loadFile = document.getElementById('loadFile')
+
+loadFileBtn.onclick = () => {
+  const img = new Image(loadFile.value)
+  ctx.drawImage(img, 0, 0)
+}
