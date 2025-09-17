@@ -23,6 +23,17 @@ var mouseY;
 var lastMouseX;
 var lastMouseY;
 
+var colour = [];
+var opacity;
+
+function rgbToHexConverter(hex) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    colour = [];
+    colour.push(r, g, b);
+};
+
 function changeTool(newTool) {
     tool = newTool;
 }
@@ -65,6 +76,7 @@ function detectCharacter(character) { // Is called when a key is pressed down
 };
 
 canvas.onmousedown = function(event) { // This is called when the mouse is pressed on the canvas. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
+    colour.push(rgbToHexConverter(brushColour.value))
     if (event.button == 0) { // Detects if it is left click
         drawing = true;
         // if (tool == "pen") {
@@ -110,7 +122,7 @@ function draw() { // Using 'event' as an argument is redundant, but it removes t
         ctx.beginPath(); // These 4 lines draw a line on the canvas. Is is better to use lines rather than points because the framerate is capped at 60, leading to gaps in the mouse position updating.
         ctx.moveTo(lastMouseX, lastMouseY); // Start position for the line
         ctx.lineTo(mouseX, mouseY); // End position for the line
-        ctx.strokeStyle = brushColour.value; // Colour of the line
+        ctx.strokeStyle = "rgb("+colour[0]+", "+colour[1]+", "+colour[2];+", "+opacity+")" // Colour of the line
         ctx.lineWidth = brushSize.value; // Width of the line
         ctx.lineCap = "round"
         ctx.stroke();
