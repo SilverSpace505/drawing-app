@@ -106,7 +106,50 @@ async function loadPfp(id) {
 const loadFileBtn = document.getElementById('loadFileBtn')
 const loadFile = document.getElementById('loadFile')
 
+function rgbaToHex(r, g, b, a = 1) {
+  // if alpha given as 0–1, convert to 0–255
+  const alpha = Math.round(a * 255);
+
+  // clamp values to 0–255 and convert to hex
+  const toHex = (n) => n.toString(16).padStart(2, '0');
+
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}${toHex(alpha)}`;
+}
+
 loadFileBtn.onclick = () => {
-  const img = new Image(loadFile.value)
-  ctx.drawImage(img, 0, 0)
+  const img = new Image();
+  img.onload = function() {
+    const imgCanvas = document.createElement('canvas')
+    const res = 200
+    imgCanvas.width = res
+    imgCanvas.height = res
+    const imgCtx = imgCanvas.getContext('2d')
+    imgCtx.drawImage(img, 0, 0, imgCanvas.width, imgCanvas.height);
+    for (let x = 0; x < res; x++) {
+      for (let y = 0; y < res; y++) {
+        const pixel = imgCtx.getImageData(x, y, 1, 1).data
+        lastMouseX = mouseX
+        lastMouseY = mouseY
+        mouseX = x / res * canvas.width
+        mouseY = y / res * canvas.height
+        if (y == 0) {
+          lastMouseX = mouseX
+          lastMouseY = mouseY
+        }
+        brushColour.value = rgbaToHex(...pixel).slice(0, 7)
+        brushSize.value = Math.max(canvas.width / res, canvas.height / res) + ''  
+        drawing = true
+        draw()
+      }
+    }
+    drawing = false
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    // Revoke the object URL to free memory
+    URL.revokeObjectURL(img.src);
+  };
+  img.src = URL.createObjectURL(loadFile.files[0])
+  // const img = new Image(loadFile.value)
+  // ctx.drawImage(img, 0, 0)
 }
