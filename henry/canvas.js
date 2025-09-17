@@ -6,6 +6,7 @@
 
 const brushColour = document.getElementById("brushColour");
 const brushSize = document.getElementById("brushSize");
+const brushOpacity = document.getElementById("opacity");
 const canvas = document.getElementById("canvas"); // Canvas which user draws on
 const ctx = canvas.getContext("2d"); // 
 
@@ -31,7 +32,7 @@ function rgbToHexConverter(hex) {
     const g = parseInt(hex.slice(3, 5), 16);
     const b = parseInt(hex.slice(5, 7), 16);
     colour = [];
-    colour.push(r, g, b);
+    colour.push(r, g, b, parseFloat(brushOpacity.value/100));
 };
 
 function changeTool(newTool) {
@@ -44,12 +45,12 @@ document.addEventListener('mousemove', function(event) { // Detects when the mou
     mouseX = event.clientX - canvas.getBoundingClientRect().left; // Sets the mouse position to a variable. The mouse position is offset by the canvas position 
     mouseY = event.clientY - canvas.getBoundingClientRect().top; // because 'event.clientY' is based off of the canvas position rather than the absolute position.
     if (tool == "pen") {
-        ctx.globalCompositeOperation = "source-over"
+        ctx.globalCompositeOperation = "source-over";
         draw();
     }
     else if (tool == "eraser") {
-        ctx.globalCompositeOperation = "destination-out"
-        erase()
+        ctx.globalCompositeOperation = "destination-out";
+        erase();
     }
 });
 
@@ -76,7 +77,7 @@ function detectCharacter(character) { // Is called when a key is pressed down
 };
 
 canvas.onmousedown = function(event) { // This is called when the mouse is pressed on the canvas. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
-    colour.push(rgbToHexConverter(brushColour.value))
+    rgbToHexConverter(brushColour.value)
     if (event.button == 0) { // Detects if it is left click
         drawing = true;
         // if (tool == "pen") {
@@ -122,9 +123,9 @@ function draw() { // Using 'event' as an argument is redundant, but it removes t
         ctx.beginPath(); // These 4 lines draw a line on the canvas. Is is better to use lines rather than points because the framerate is capped at 60, leading to gaps in the mouse position updating.
         ctx.moveTo(lastMouseX, lastMouseY); // Start position for the line
         ctx.lineTo(mouseX, mouseY); // End position for the line
-        ctx.strokeStyle = "rgb("+colour[0]+", "+colour[1]+", "+colour[2];+", "+opacity+")" // Colour of the line
+        ctx.strokeStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")" // Colour of the line
         ctx.lineWidth = brushSize.value; // Width of the line
-        ctx.lineCap = "round"
+        ctx.lineCap = "round";
         ctx.stroke();
         canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]) // Pushes the line parameters to the data for saving/loading
     };
