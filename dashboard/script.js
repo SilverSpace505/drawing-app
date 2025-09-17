@@ -87,7 +87,12 @@ function displayDrawings(drawings, parentElement) {
     const canvas = document.createElement('canvas')
     canvas.classList.add('drawing-canvas')
 
+    const deleteBtn = document.createElement('button')
+    deleteBtn.classList.add('delete-btn')
+    deleteBtn.textContent = 'Delete'
+
     element.appendChild(canvas)
+    element.appendChild(deleteBtn)
     element.appendChild(title)
     element.appendChild(document.createElement('br'))
     element.appendChild(description)
