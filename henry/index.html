@@ -14,7 +14,9 @@
         <label for="brushColour">Colour:</label> <!-- The brush colour -->
         <input type="color" id="brushColour" value="#000000"> <!-- Makes a colour wheel and assigns it's hex code to the 'brushColour' ID -->
         
-        <div class=""><input type="range" min="1" max="10" value="1" class="slider" id="brushSize"></div> <!-- Makes a slider and assigns it's integer value to the 'brushSize' ID -->
+        
+        <div class=""><input type="range" min="1" max="10" value="1" class="slider" id="brushSize">Width</div> <!-- Makes a slider and assigns it's integer value to the 'brushSize' ID -->
+        <div class=""><input type="range" min="0" max="100" value="0" class="slider" id="opacity">Opacity</div> <!-- Makes a slider and assigns it's integer value to the 'opacity' ID -->
         <div class="dropdown">
             <button>Tools</button>
             <div class="dropdown-content">
@@ -22,7 +24,11 @@
                 <a onClick="changeTool('eraser')">Eraser</a>
             </div>
         </div>
-
+        <br>
+        <br>
+        <input type="file" name="load" id="loadFile">
+        <button id="loadFileBtn">Load File</button>
+        <br>
 
         <div id="emailDisplay">User: </div>
         <canvas id="pfp"></canvas>
