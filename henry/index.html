@@ -15,6 +15,14 @@
         <input type="color" id="brushColour" value="#000000"> <!-- Makes a colour wheel and assigns it's hex code to the 'brushColour' ID -->
         
         <div class=""><input type="range" min="1" max="10" value="1" class="slider" id="brushSize"></div> <!-- Makes a slider and assigns it's integer value to the 'brushSize' ID -->
+        <div class="dropdown">
+            <button>Tools</button>
+            <div class="dropdown-content">
+                <a onClick="changeTool('pen')">Pen</a>
+                <a onClick="changeTool('eraser')">Eraser</a>
+            </div>
+        </div>
+
 
         <div id="emailDisplay">User: </div>
         <canvas id="pfp"></canvas>
@@ -29,7 +37,7 @@
         <button id="downloadBtn">Download</button>
         <br>
         <br>
-
+        
         <canvas id="canvas" width="1800" height="968" style="left:12px; top:100px; border:1px solid black;"></canvas> <!-- The drawing area -->
 
         <link rel="stylesheet" href="style.css"> 
