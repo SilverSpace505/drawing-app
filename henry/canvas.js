@@ -135,11 +135,11 @@ function draw() { // Using 'event' as an argument is redundant, but it removes t
 
 // Rhys helped with the saving and loading
 function save() {
-    return JSON.stringify(canvasData); // Turns data into a JSON
+    return compressJSON(canvasData); // Turns data into a JSON
 }
 
 function load(data) { // 'data' is a parameter which is handled by Rhys' code
-    data = JSON.parse(data)
+    data = decompressJSON(data)
     canvasDataBreaks = data.length - 1
     canvasData = data
     console.log(data)
