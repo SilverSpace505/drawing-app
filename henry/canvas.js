@@ -32,7 +32,7 @@ function rgbToHexConverter(hex) {
     const g = parseInt(hex.slice(3, 5), 16);
     const b = parseInt(hex.slice(5, 7), 16);
     colour = [];
-    colour.push(r, g, b, parseFloat(brushOpacity.value/100));
+    colour.push(r, g, b, parseFloat(Math.abs(1-(brushOpacity.value/100))));
 };
 
 function changeTool(newTool) {
