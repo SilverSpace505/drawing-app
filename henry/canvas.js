@@ -79,9 +79,12 @@ canvas.onmouseup = function (event) {
 };
 
 function erase() {
+
     // ctx.clearRect(mouseX, mouseY, brushSize.value, brushSize.value);
-    ctx.arc(100, 75, 50, 0, Math.PI * 2);
-}
+    ctx.beginPath();
+    ctx.arc(mouseX, mouseY, brushSize.value/2, 0, Math.PI * 2);
+    ctx.stroke();
+};
 
 function draw() { // Using 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
     if (drawing == true) {
@@ -90,6 +93,7 @@ function draw() { // Using 'event' as an argument is redundant, but it removes t
         ctx.lineTo(mouseX, mouseY); // End position for the line
         ctx.strokeStyle = brushColour.value; // Colour of the line
         ctx.lineWidth = brushSize.value; // Width of the line
+        ctx.lineCap = "round"
         ctx.stroke();
         canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]) // Pushes the line parameters to the data for saving/loading
     };
@@ -115,6 +119,7 @@ function load(data) { // 'data' is a parameter which is handled by Rhys' code
                 ctx.lineTo(data[l][i][2], data[l][i][3]);
                 ctx.strokeStyle = data[l][i][4];
                 ctx.lineWidth = data[l][i][5];
+                ctx.lineCap = "round"
                 ctx.stroke();
             };
         };
