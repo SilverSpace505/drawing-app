@@ -1,8 +1,9 @@
-const username = document.getElementById('signUpUsername')
+const email = document.getElementById('signUpEmail')
+const username = document.getElementById('username')
 const password = document.getElementById('signUpPassword')
 const confirmPW = document.getElementById('signUpConfirm')
 const accName = document.getElementById('accountName')
-const name2 = document.getElementById('logInUsername')
+const email2 = document.getElementById('logInEmail')
 const pw2 = document.getElementById('logInPassword')
 const signUpForm = document.getElementById('signUpContainer')
 const logInForm = document.getElementById('logInContainer')
@@ -19,7 +20,7 @@ function logMeIn() {
 }
 
 function addAccount() {
-    if (!username.value || 
+    if (!email.value || 
         !password.value || 
         !confirmPW.value
     ) {
@@ -32,17 +33,17 @@ function addAccount() {
         return
     }
 
-    createAccount(username.value, password.value)
+    createAccount(email.value, password.value)
     signUpForm.style.top = '100%'
 }
 
 function loginHTML() {
-    if (!name2.value || !pw2.value) {
+    if (!email2.value || !pw2.value) {
         console.log('didnt fill it in')
         return
     }
 
-    login(name2.value, pw2.value)
+    login(email2.value, pw2.value)
     logInForm.style.top = '100%'
 }
 
@@ -72,6 +73,7 @@ async function createDrawing() {
 async function logout() {
   const { error } = await client.auth.signOut()
   console.log(error)
+  console.log('this should give an error', await client.auth.getUser())
   accName.innerText = 'Not Signed In'
 }
 
@@ -89,7 +91,7 @@ async function login(email, password) {
 async function createAccount(email, password) {
   const {data, error} = await client.auth.signUp({
     email,
-    password,
+    password
   })
   
   console.log(data, error)
@@ -98,7 +100,16 @@ async function createAccount(email, password) {
     login(email, password)
   }
   else {
+    console.log(user.id, username.value)
+    const {d, e} = await client
+    .from('profiles')
+    .insert([
+      {name: username.value}
+    ])
+    .select()
+    console.log(d, e)
     updateUI(data)
+
   }
 }
 
@@ -141,7 +152,7 @@ async function getName(id) {
     return;
   }
   console.log(data, data[0])
-  if (!data || !data[0]) return 'No name set';
+  if (!data || !data[0]) return user.email;
   profileData = data[0];
   return data[0].name
 }
