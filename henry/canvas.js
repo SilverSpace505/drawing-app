@@ -114,6 +114,8 @@ function draw(erase) { // Using 'event' as an argument is redundant, but it remo
 };
 setInterval(draw, 0); // Rhys helped with this bit. It helped because it allows the 'draw()' function to run while the mouse position is being updated.
 
+
+
 // Rhys helped with the saving and loading
 function save() {
     return JSON.stringify(canvasData); // Turns data into a JSON
@@ -142,3 +144,37 @@ function load(data) { // 'data' is a parameter which is handled by Rhys' code
 
 // HENRY CODE ENDS HERE
 document.addEventListener('contextmenu', e => e.preventDefault()) // Removes right click menu - done by Sam
+
+
+//ChatGPT compression using pako.js library
+// Compress any JSON-serializable object
+function compressJSON(obj) {
+    // 1. Convert to JSON string
+    const jsonStr = JSON.stringify(obj);
+
+    // 2. Encode string as UTF-8 bytes
+    const encoder = new TextEncoder();
+    const bytes = encoder.encode(jsonStr);
+
+    // 3. Deflate (compress) the bytes
+    const compressed = pako.deflate(bytes);
+
+    // 4. Convert to base64 for storage/transmission
+    return btoa(String.fromCharCode(...compressed));
+}
+
+// Decompress back to object
+function decompressJSON(data) {
+    // 1. Base64 → compressed bytes
+    const compressed = Uint8Array.from(atob(data), c => c.charCodeAt(0));
+
+    // 2. Inflate (decompress)
+    const bytes = pako.inflate(compressed);
+
+    // 3. Decode UTF-8 → string
+    const decoder = new TextDecoder();
+    const jsonStr = decoder.decode(bytes);
+
+    // 4. Parse JSON
+    return JSON.parse(jsonStr);
+}

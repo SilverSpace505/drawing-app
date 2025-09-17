@@ -43,6 +43,10 @@
         <link rel="stylesheet" href="style.css"> 
 
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script type="module">
+            import pako from 'https://cdn.jsdelivr.net/npm/pako@2.1.0/+esm'
+            window.pako = pako
+        </script>
         <script src="canvas.js"></script>
         <script src="network.js"></script>
 
