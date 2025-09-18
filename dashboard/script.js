@@ -83,7 +83,7 @@ function displayDrawings(drawings, parentElement) {
     parentElement.appendChild(element)
 
     element.onclick = () => {
-      window.open(`../henry/?load=${drawing.id}`)
+      window.open(`../draw/?load=${drawing.id}`)
     }
 
     load(drawing.data, canvas, canvas.getContext('2d'))
@@ -104,7 +104,7 @@ if (data.user) {
 }
 
 accountsBtn.onclick = () => {
-  window.open('../sam-accounts')
+  window.open('../account')
 }
 
 const newBtn = document.getElementById('newBtn')
