@@ -109,5 +109,5 @@ accountsBtn.onclick = () => {
 
 const newBtn = document.getElementById('newBtn')
 newBtn.onclick = () => {
-  window.open('../henry')
+  window.open('../draw')
 }
