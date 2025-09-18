@@ -27,6 +27,11 @@
     <button id="newBtn">Create new drawing</button>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module">
+        import pako from 'https://cdn.jsdelivr.net/npm/pako@2.1.0/+esm'
+        window.pako = pako
+    </script>
+    <script src="../saveload.js"></script>
     <script type="module" src="script.js"></script>
   </div>
 </body>

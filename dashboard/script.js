@@ -52,23 +52,6 @@ account.onclick = () => {
   window.open('../profile')
 }
 
-function load(data, canvas, ctx) { // 'data' is a parameter which is handled by Rhys' code
-    data = JSON.parse(data)
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clears the canvas
-    for (var l = 0; l < data.length; l++) {
-        for (var i = 0; i < data[l].length; i++) {
-            if (data[i] != "RELEASE") { // Redraws each line one by one with the same parameters as before
-                ctx.beginPath();
-                ctx.moveTo(data[l][i][0] * (canvas.width / 1800), data[l][i][1] * (canvas.height / 968));
-                ctx.lineTo(data[l][i][2] * (canvas.width / 1800), data[l][i][3] * (canvas.height / 968));
-                ctx.lineWidth = data[l][i][5] * Math.min(canvas.width / 1800, canvas.height / 968);
-                ctx.strokeStyle = data[l][i][4];
-                ctx.stroke();
-            }
-        };
-    }
-};
-
 const {data} = await client.auth.getUser()
 
 function displayDrawings(drawings, parentElement) {
