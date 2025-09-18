@@ -134,6 +134,7 @@ async function updateUI(data) {
 (async() => {
     const {data, error} = await client.auth.getUser() //if user already signed in (I assume with localStorage) then show username right away
     updateUI(data)
+    
 })()
 
 async function getName(id) {
