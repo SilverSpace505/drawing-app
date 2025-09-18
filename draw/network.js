@@ -36,27 +36,10 @@ downloadBtn.onclick = async() => {
   // Filters
   .eq('name', downloadName.value)
 
-  load(data[0].data)
+  load(data[0].data, canvas, ctx)
 }
 
 const emailDisplay = document.getElementById('emailDisplay');
-
-function load2(data, canvas, ctx) { // 'data' is a parameter which is handled by Rhys' code
-    data = JSON.parse(data)
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clears the canvas
-    for (var l = 0; l < data.length; l++) {
-        for (var i = 0; i < data[l].length; i++) {
-            if (data[i] != "RELEASE") { // Redraws each line one by one with the same parameters as before
-                ctx.beginPath();
-                ctx.moveTo(data[l][i][0] * (canvas.width / 1800), data[l][i][1] * (canvas.height / 968));
-                ctx.lineTo(data[l][i][2] * (canvas.width / 1800), data[l][i][3] * (canvas.height / 968));
-                ctx.lineWidth = data[l][i][5] * Math.min(canvas.width / 1800, canvas.height / 968);
-                ctx.strokeStyle = data[l][i][4];
-                ctx.stroke();
-            }
-        };
-    }
-};
 
 async function getName(id) {
   const {data, error} = await client
@@ -80,7 +63,7 @@ async function loadPfp(id) {
   .from('drawings')
   .select('*') //get all columns
   .eq('id', id)
-  load2(data[0].data, pfpCanvas, pfpCtx)
+  load(data[0].data, pfpCanvas, pfpCtx)
 }
 
 (async() => { 
@@ -99,7 +82,7 @@ async function loadPfp(id) {
     .select("*")
     .eq('id', loadId)
     
-    if (data) load(data[0].data)
+    if (data) load(data[0].data, canvas, ctx)
   }
 })()
 
@@ -125,6 +108,11 @@ loadFileBtn.onclick = () => {
     imgCanvas.height = res
     const imgCtx = imgCanvas.getContext('2d')
     imgCtx.drawImage(img, 0, 0, imgCanvas.width, imgCanvas.height);
+    tool = 'pen'
+    canvasData.push([])
+    canvasDataBreaks = canvasData.length - 1
+    canvasData[canvasData.length - 1].push('pen')
+    console.log(canvasData)
     for (let x = 0; x < res; x++) {
       for (let y = 0; y < res; y++) {
         const pixel = imgCtx.getImageData(x, y, 1, 1).data

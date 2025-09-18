@@ -88,6 +88,7 @@ async function login(email, password) {
   console.log(data2, error2)
   const {data, error} = await client.auth.getUser()
   console.log(data, error)
+  //show logged in user's name on screen
   updateUI(data)
 }
 
@@ -104,6 +105,7 @@ async function createAccount(email, password) {
   }
   else {
     console.log(user.id, username.value)
+    //create a new profile, since default supabase users cannot store a username and profile picture
     const {d, e} = await client
     .from('profiles')
     .insert([
@@ -111,6 +113,7 @@ async function createAccount(email, password) {
     ])
     .select()
     console.log(d, e)
+    //show the user's name onscreen
     updateUI(data)
 
   }
@@ -120,36 +123,25 @@ async function updateUI(data) {
     if (!data) return;
     user = data.user
     if (!user) return
-    if (profileData != null) accName.innerText = profileData.name
-    else accName.innerText = await getName(user.id)
+    if (profileData != null) accName.innerText = profileData.name //no need to fetch twice - rate limits
+    else accName.innerText = await getName(user.id) /*
+    this returns the name, but it also sets profileData so I can use it any other time.
+    However, this might be a problem if the user wants to change their name, but for now the profile picture, username, etc. is on a
+    different page, so it will always be a fresh load of my page afterward.
+    */
 }
 
 (async() => {
-  // const {data, error} = await client.from('users').select()
-  // console.log(data, error)
-
-  // const { silly, silly2 } = await client.auth.signUp({
-  //   email: 'example@email.com',
-  //   password: 'example-password',
-  // })
-    const {data, error} = await client.auth.getUser()
+    const {data, error} = await client.auth.getUser() //if user already signed in (I assume with localStorage) then show username right away
     updateUI(data)
-    //if (!user) await createAccount('BigMAN123@a.co', 'sigma123')
-    //else accName.innerText = user.email
-
-  // await login('example@email.com', 'example-password')
-
-  // await logout();
-
-  // console.log(data2, error2)
-  // createDrawing()
+    
 })()
 
 async function getName(id) {
   const {data, error} = await client
   .from('profiles')
   .select('*') //get all columns
-  .eq('id', id)
+  .eq('id', id) //find the user's profile based on their id/token
   if (error) {
     console.log(error)
     return;
@@ -157,5 +149,5 @@ async function getName(id) {
   console.log(data, data[0])
   if (!data || !data[0]) return user.email;
   profileData = data[0];
-  return data[0].name
+  return data[0].name //this needs to be awaited, otherwise since async it will return a Promise
 }

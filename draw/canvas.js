@@ -10,12 +10,12 @@ const brushOpacity = document.getElementById("opacity");
 const canvas = document.getElementById("canvas"); // Canvas which user draws on
 const ctx = canvas.getContext("2d"); // 
 
-var tool = "pen";
+var tool = 'pen';
 var drawing = false;
 var size = 1;
 var redoStorage = [];
 
-// Line start position x, line start position y, line end position x, line end position y, colour, size
+// Line start position x, line start position y, line end position x, line end position y, colour, size, tool
 var canvasData = [[]]; // Stores each mouse stroke in it's own array. The final index is always a blank array.
 var canvasDataBreaks = 0; // Variable used to control the length of 'canvasData'
 
@@ -67,7 +67,7 @@ function detectCharacter(character) { // Is called when a key is pressed down
             canvasDataBreaks -= 1; 
             load(compressJSON(canvasData), canvas, ctx); // Loads the canvas, now with everything up to the 2nd most recent 'RELEASE' deleted
         }
-        else if (character.key == "y") { // Is the 'y' key pressed?
+        else if (character.key == "y" && redoStorage.length != 0) { // Is the 'y' key pressed?
             canvasData.splice(canvasData.length - 1, 0, redoStorage[(redoStorage.length - 1)])
             redoStorage.splice(redoStorage.length - 1, 1); // Removes 'redone' from 'redoStorage'
             canvasDataBreaks += 1;
@@ -77,6 +77,7 @@ function detectCharacter(character) { // Is called when a key is pressed down
 };
 
 canvas.onmousedown = function(event) { // This is called when the mouse is pressed on the canvas. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
+    canvasData[canvasData.length - 1].push(tool)
     rgbToHexConverter(brushColour.value)
     if (event.button == 0) { // Detects if it is left click
         drawing = true;
@@ -97,14 +98,14 @@ onmouseup = function(event) { // This is called when the mouse is released. 'eve
 
 function erase() {
     if (drawing == true) {
-        ctx.strokeStyle = "rgba(0,0,0,1)";
-        ctx.lineWidth = brushSize.value*2;
-        ctx.lineCap = "round";
-
         ctx.beginPath();
         ctx.moveTo(lastMouseX, lastMouseY);
         ctx.lineTo(mouseX, mouseY);
+        ctx.strokeStyle = "rgba(0,0,0,1)"; // The only important parameter here is 'a = 1' to make the eraser draw transparent lines
+        ctx.lineWidth = brushSize.value; // Rest of the parameters are the same as in 'draw()'
+        ctx.lineCap = "round";
         ctx.stroke();
+        canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value])
     }
 };
 
@@ -115,9 +116,9 @@ function draw() { // Using 'event' as an argument is redundant, but it removes t
         ctx.lineTo(mouseX, mouseY); // End position for the line
         ctx.strokeStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")" // Colour of the line
         ctx.lineWidth = brushSize.value; // Width of the line
-        ctx.lineCap = "round";
+        ctx.lineCap = "round"; // Makes the lines appear circular and makes wide lines cleaner
         ctx.stroke();
-        canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]) // Pushes the line parameters to the data for saving/loading
+        canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]); // Pushes the line parameters to the data for saving/loading
     };
 };
 
