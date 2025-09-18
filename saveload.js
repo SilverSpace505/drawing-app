@@ -56,8 +56,10 @@ function load(data, canvas, ctx) { // 'data' is a parameter which is handled by 
     ctx.save()
     ctx.scale(canvas.width / 1800, canvas.height / 968)
     for (var l = 0; l < data.length; l++) {
-        for (var i = 0; i < data[l].length; i++) {
-            if (data[i] != "RELEASE") { // Redraws each line one by one with the same parameters as before
+        if (data[l][0] == "pen") { // Redraws each line one by one with the same parameters as before
+            ctx.globalCompositeOperation = "source-over";
+            for (var i = 0; i < data[l].length; i++) {
+                console.log('pen')
                 ctx.beginPath();
                 ctx.moveTo(data[l][i][0], data[l][i][1]);
                 ctx.lineTo(data[l][i][2], data[l][i][3]);
@@ -65,8 +67,22 @@ function load(data, canvas, ctx) { // 'data' is a parameter which is handled by 
                 ctx.lineWidth = data[l][i][5];
                 ctx.lineCap = "round"
                 ctx.stroke();
-            };
+            }
+        }
+        else if (data[l][0] == "eraser") {
+            ctx.globalCompositeOperation = "destination-out";
+            for (var i = 0; i < data[l].length; i++) {
+                console.log('eraser')
+                ctx.beginPath();
+                ctx.moveTo(data[l][i][0], data[l][i][1]);
+                ctx.lineTo(data[l][i][2], data[l][i][3]);
+                ctx.strokeStyle = "rgba(0,0,0,1)"; // The only important parameter here is 'a = 1' to make the eraser draw transparent lines
+                ctx.lineWidth = data[l][i][5]; // Rest of the parameters are the same as in 'draw()'
+                ctx.lineCap = "round";
+                ctx.stroke();
+            }
+        }
         };
-    };
+    // };
     ctx.restore()
 };
