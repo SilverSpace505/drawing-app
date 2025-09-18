@@ -65,13 +65,13 @@ function detectCharacter(character) { // Is called when a key is pressed down
             canvasData.splice(canvasDataBreaks - 1, 1); // Because the final index is always a blank array, this erases the last array which actually has data
             redoStorage.push(redone); // Pushing 'redone' into 'redoStorage' puts all of the data in a single index, which makes it easier to handle
             canvasDataBreaks -= 1; 
-            load(compressJSON(canvasData)); // Loads the canvas, now with everything up to the 2nd most recent 'RELEASE' deleted
+            load(compressJSON(canvasData), canvas, ctx); // Loads the canvas, now with everything up to the 2nd most recent 'RELEASE' deleted
         }
         else if (character.key == "y") { // Is the 'y' key pressed?
             canvasData.splice(canvasData.length - 1, 0, redoStorage[(redoStorage.length - 1)])
             redoStorage.splice(redoStorage.length - 1, 1); // Removes 'redone' from 'redoStorage'
             canvasDataBreaks += 1;
-            load(compressJSON(canvasData)); // Loads the canvas, now with the 'redone' data added
+            load(compressJSON(canvasData), canvas, ctx); // Loads the canvas, now with the 'redone' data added
         };
     };
 };
@@ -121,77 +121,31 @@ function draw() { // Using 'event' as an argument is redundant, but it removes t
     };
 };
 
-// Rhys helped with the saving and loading
-function save() {
-    return compressJSON(canvasData); // Turns data into a JSON
-}
+// // Rhys helped with the saving and loading
+// function save() {
+//     return compressJSON(canvasData); // Turns data into a JSON
+// }
 
-function load(data) { // 'data' is a parameter which is handled by Rhys' code
-    data = decompressJSON(data)
-    canvasDataBreaks = data.length - 1
-    canvasData = data
-    console.log(data)
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clears the canvas
-    for (var l = 0; l < data.length; l++) {
-        for (var i = 0; i < data[l].length; i++) {
-            if (data[i] != "RELEASE") { // Redraws each line one by one with the same parameters as before
-                ctx.beginPath();
-                ctx.moveTo(data[l][i][0], data[l][i][1]);
-                ctx.lineTo(data[l][i][2], data[l][i][3]);
-                ctx.strokeStyle = data[l][i][4];
-                ctx.lineWidth = data[l][i][5];
-                ctx.lineCap = "round"
-                ctx.stroke();
-            };
-        };
-    };
-};
+// function load(data) { // 'data' is a parameter which is handled by Rhys' code
+//     data = decompressJSON(data)
+//     canvasDataBreaks = data.length - 1
+//     canvasData = data
+//     console.log(data)
+//     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clears the canvas
+//     for (var l = 0; l < data.length; l++) {
+//         for (var i = 0; i < data[l].length; i++) {
+//             if (data[i] != "RELEASE") { // Redraws each line one by one with the same parameters as before
+//                 ctx.beginPath();
+//                 ctx.moveTo(data[l][i][0], data[l][i][1]);
+//                 ctx.lineTo(data[l][i][2], data[l][i][3]);
+//                 ctx.strokeStyle = data[l][i][4];
+//                 ctx.lineWidth = data[l][i][5];
+//                 ctx.lineCap = "round"
+//                 ctx.stroke();
+//             };
+//         };
+//     };
+// };
 
 // HENRY CODE ENDS HERE
 document.addEventListener('contextmenu', e => e.preventDefault()) // Removes right click menu - done by Sam
-
-
-//ChatGPT compression using pako.js library
-// Compress any JSON-serializable object
-function compressJSON(obj) {
-    // 1. JSON stringify
-    const jsonStr = JSON.stringify(obj);
-
-    // 2. Encode to UTF-8
-    const encoder = new TextEncoder();
-    const bytes = encoder.encode(jsonStr);
-
-    // 3. Compress
-    const compressed = pako.deflate(bytes);
-
-    // 4. Convert to Base64 safely (chunked to avoid call stack crash)
-    let binary = "";
-    const chunkSize = 0x8000; // 32KB
-    for (let i = 0; i < compressed.length; i += chunkSize) {
-        binary += String.fromCharCode.apply(
-            null,
-            compressed.subarray(i, i + chunkSize)
-        );
-    }
-    return btoa(binary);
-}
-
-function decompressJSON(base64Str) {
-    // 1. Base64 decode
-    const binary = atob(base64Str);
-    const len = binary.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-        bytes[i] = binary.charCodeAt(i);
-    }
-
-    // 2. Inflate (decompress)
-    const decompressed = pako.inflate(bytes);
-
-    // 3. Decode UTF-8
-    const decoder = new TextDecoder();
-    const jsonStr = decoder.decode(decompressed);
-
-    // 4. Parse JSON
-    return JSON.parse(jsonStr);
-}
