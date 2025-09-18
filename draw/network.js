@@ -108,6 +108,11 @@ loadFileBtn.onclick = () => {
     imgCanvas.height = res
     const imgCtx = imgCanvas.getContext('2d')
     imgCtx.drawImage(img, 0, 0, imgCanvas.width, imgCanvas.height);
+    tool = 'pen'
+    canvasData.push([])
+    canvasDataBreaks = canvasData.length - 1
+    canvasData[canvasData.length - 1].push('pen')
+    console.log(canvasData)
     for (let x = 0; x < res; x++) {
       for (let y = 0; y < res; y++) {
         const pixel = imgCtx.getImageData(x, y, 1, 1).data
