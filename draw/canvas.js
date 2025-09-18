@@ -10,7 +10,7 @@ const brushOpacity = document.getElementById("opacity");
 const canvas = document.getElementById("canvas"); // Canvas which user draws on
 const ctx = canvas.getContext("2d"); // 
 
-var tool = "pen";
+var tool = 'pen';
 var drawing = false;
 var size = 1;
 var redoStorage = [];
@@ -77,6 +77,7 @@ function detectCharacter(character) { // Is called when a key is pressed down
 };
 
 canvas.onmousedown = function(event) { // This is called when the mouse is pressed on the canvas. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
+    canvasData[canvasData.length - 1].push(tool)
     rgbToHexConverter(brushColour.value)
     if (event.button == 0) { // Detects if it is left click
         drawing = true;
