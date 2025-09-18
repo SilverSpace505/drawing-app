@@ -17,7 +17,7 @@ var redoStorage = [];
 
 // Line start position x, line start position y, line end position x, line end position y, colour, size
 var canvasData = [[]]; // Stores each mouse stroke in it's own array. The final index is always a blank array.
-var canvasDataBreaks = 0; // Variable used to control 'canvasData'
+var canvasDataBreaks = 0; // Variable used to control the length of 'canvasData'
 
 var mouseX;
 var mouseY;
@@ -28,14 +28,14 @@ var colour = [];
 var opacity;
 
 function rgbToHexConverter(hex) {
-    const r = parseInt(hex.slice(1, 3), 16);
+    const r = parseInt(hex.slice(1, 3), 16); // These 3 lines get the rgb values from the hex code
     const g = parseInt(hex.slice(3, 5), 16);
     const b = parseInt(hex.slice(5, 7), 16);
-    colour = [];
-    colour.push(r, g, b, parseFloat(Math.abs(1-(brushOpacity.value/100))));
+    colour = []; // Clears the 'colour' array for it to be updated
+    colour.push(r, g, b, parseFloat(Math.abs(1-(brushOpacity.value/100)))); // Updates the 'colour' array to have the new rgba values 
 };
 
-function changeTool(newTool) {
+function changeTool(newTool) { // Different arguments from HTML buttons
     tool = newTool;
 }
 
@@ -45,11 +45,11 @@ document.addEventListener('mousemove', function(event) { // Detects when the mou
     mouseX = event.clientX - canvas.getBoundingClientRect().left; // Sets the mouse position to a variable. The mouse position is offset by the canvas position 
     mouseY = event.clientY - canvas.getBoundingClientRect().top; // because 'event.clientY' is based off of the canvas position rather than the absolute position.
     if (tool == "pen") {
-        ctx.globalCompositeOperation = "source-over";
+        ctx.globalCompositeOperation = "source-over"; // Sets the built-in 'canvas drawing mode' to it's default
         draw();
     }
     else if (tool == "eraser") {
-        ctx.globalCompositeOperation = "destination-out";
+        ctx.globalCompositeOperation = "destination-out"; // Sets the built-in 'canvas drawing mode' to only draw on top of existing elements
         erase();
     }
 });
@@ -62,9 +62,9 @@ function detectCharacter(character) { // Is called when a key is pressed down
             for (var i = 0; i < canvasData[canvasDataBreaks - 1].length; i++) {
                 redone.push(canvasData[canvasDataBreaks - 1][i]); // Pushes all of the data which is about to be removed from 'canvasData' to 'redone'
             }
-            canvasData.splice(canvasDataBreaks - 1, 1); // Removes everything up to the most recent 'RELEASE' from the data
+            canvasData.splice(canvasDataBreaks - 1, 1); // Because the final index is always a blank array, this erases the last array which actually has data
             redoStorage.push(redone); // Pushing 'redone' into 'redoStorage' puts all of the data in a single index, which makes it easier to handle
-            canvasDataBreaks -= 1;
+            canvasDataBreaks -= 1; 
             load(compressJSON(canvasData)); // Loads the canvas, now with everything up to the 2nd most recent 'RELEASE' deleted
         }
         else if (character.key == "y") { // Is the 'y' key pressed?
@@ -80,14 +80,18 @@ canvas.onmousedown = function(event) { // This is called when the mouse is press
     rgbToHexConverter(brushColour.value)
     if (event.button == 0) { // Detects if it is left click
         drawing = true;
-        // if (tool == "pen") {
-        //     ctx.globalCompositeOperation = "source-over"
-        //     draw();
-        // }
-        // else if (tool == "eraser") {
-        //     ctx.globalCompositeOperation = "destination-out"
-        //     erase()
-        // }
+    };
+};
+
+onmouseup = function(event) { // This is called when the mouse is released. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
+    if (event.button == 0) { // Detects if it is left click
+        if (drawing == true) {
+            canvasDataBreaks += 1;
+        }
+        drawing = false;
+        if (canvasData.length - 1 < canvasDataBreaks && canvasData[canvasData.length - 1] != []) {
+            canvasData.push([]);
+        };
     };
 };
 
@@ -104,20 +108,6 @@ function erase() {
     }
 };
 
-onmouseup = function(event) { // This is called when the mouse is released. 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
-    if (event.button == 0) { // Detects if it is left click
-        drawing = false;
-        if (canvasData.length - 1 < canvasDataBreaks && canvasData[canvasData.length - 1] != []) {
-            canvasData.push([]);
-        };
-    };
-};
-
-canvas.onmouseup = function (event) {
-    canvasDataBreaks += 1; // Done to detect when the user releases the mouse, so that 'ctrl + z' is able to detect when the mouse was last released.
-    // THERE IS A BUG HERE. Because 'canvasDataBreaks' is only added to when the mouse is released on the canvas, dragging it off the canvas and then releasing breaks undo.
-};
-
 function draw() { // Using 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
     if (drawing == true) {
         ctx.beginPath(); // These 4 lines draw a line on the canvas. Is is better to use lines rather than points because the framerate is capped at 60, leading to gaps in the mouse position updating.
@@ -130,8 +120,6 @@ function draw() { // Using 'event' as an argument is redundant, but it removes t
         canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]) // Pushes the line parameters to the data for saving/loading
     };
 };
-
-
 
 // Rhys helped with the saving and loading
 function save() {
