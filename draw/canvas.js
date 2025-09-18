@@ -15,7 +15,7 @@ var drawing = false;
 var size = 1;
 var redoStorage = [];
 
-// Line start position x, line start position y, line end position x, line end position y, colour, size
+// Line start position x, line start position y, line end position x, line end position y, colour, size, tool
 var canvasData = [[]]; // Stores each mouse stroke in it's own array. The final index is always a blank array.
 var canvasDataBreaks = 0; // Variable used to control the length of 'canvasData'
 
@@ -97,14 +97,14 @@ onmouseup = function(event) { // This is called when the mouse is released. 'eve
 
 function erase() {
     if (drawing == true) {
-        ctx.strokeStyle = "rgba(0,0,0,1)";
-        ctx.lineWidth = brushSize.value*2;
-        ctx.lineCap = "round";
-
         ctx.beginPath();
         ctx.moveTo(lastMouseX, lastMouseY);
         ctx.lineTo(mouseX, mouseY);
+        ctx.strokeStyle = "rgba(0,0,0,1)"; // The only important parameter here is 'a = 1' to make the eraser draw transparent lines
+        ctx.lineWidth = brushSize.value; // Rest of the parameters are the same as in 'draw()'
+        ctx.lineCap = "round";
         ctx.stroke();
+        canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value])
     }
 };
 
@@ -115,9 +115,9 @@ function draw() { // Using 'event' as an argument is redundant, but it removes t
         ctx.lineTo(mouseX, mouseY); // End position for the line
         ctx.strokeStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")" // Colour of the line
         ctx.lineWidth = brushSize.value; // Width of the line
-        ctx.lineCap = "round";
+        ctx.lineCap = "round"; // Makes the lines appear circular and makes wide lines cleaner
         ctx.stroke();
-        canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]) // Pushes the line parameters to the data for saving/loading
+        canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]); // Pushes the line parameters to the data for saving/loading
     };
 };
 
