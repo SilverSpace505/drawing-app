@@ -65,13 +65,13 @@ function detectCharacter(character) { // Is called when a key is pressed down
             canvasData.splice(canvasDataBreaks - 1, 1); // Because the final index is always a blank array, this erases the last array which actually has data
             redoStorage.push(redone); // Pushing 'redone' into 'redoStorage' puts all of the data in a single index, which makes it easier to handle
             canvasDataBreaks -= 1; 
-            load(compressJSON(canvasData), canvas, ctx); // Loads the canvas, now with everything up to the 2nd most recent 'RELEASE' deleted
+            load(compressJSON(canvasData), canvas, ctx, true); // Loads the canvas, now with everything up to the 2nd most recent 'RELEASE' deleted
         }
         else if (character.key == "y" && redoStorage.length != 0) { // Is the 'y' key pressed?
             canvasData.splice(canvasData.length - 1, 0, redoStorage[(redoStorage.length - 1)])
             redoStorage.splice(redoStorage.length - 1, 1); // Removes 'redone' from 'redoStorage'
             canvasDataBreaks += 1;
-            load(compressJSON(canvasData), canvas, ctx); // Loads the canvas, now with the 'redone' data added
+            load(compressJSON(canvasData), canvas, ctx, true); // Loads the canvas, now with the 'redone' data added
         };
     };
 };
