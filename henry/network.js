@@ -137,7 +137,8 @@ loadFileBtn.onclick = () => {
           lastMouseY = mouseY
         }
         colour = pixel
-        brushSize.value = Math.max(canvas.width / res, canvas.height / res) + ''  
+        brushSize.value = Math.max(canvas.width / res, canvas.height / res) + '' 
+        brushColour.value = rgbaToHex(...pixel).slice(0, 7) 
         drawing = true
         draw()
       }
