@@ -3,23 +3,32 @@ body {
 }
 
 
-.outline {
-  border: 5px solid black;
+.selected {
+  background-color: rgba(100, 100, 100, 0.5);
+  font-family: Arial;
+  font-size: 500%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  aspect-ratio: 1;
+  border-radius: 15px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .drawing {
   aspect-ratio: 1;
   width: 120px;
   text-align: center;
-}
-
-.no-outline {
-  border: 5px solid white;
+  border: 5px solid black;
+  border-radius: 20px;
+  position: relative;
 }
 
 canvas {
   width: 100%;
   aspect-ratio: 1;
+  border-radius: 15px;
 }
 
 .drawing-title, .drawing-description {

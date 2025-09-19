@@ -57,7 +57,7 @@ async function getDrawings() {
 function displayDrawings(drawings, parentElement) {
   for (const drawing of drawings) {
     const element = document.createElement('div')
-    element.classList.add('drawing', 'no-outline')
+    element.classList.add('drawing')
 
     const title = document.createElement('span')
     title.classList.add('drawing-title')
@@ -72,24 +72,28 @@ function displayDrawings(drawings, parentElement) {
 
     element.appendChild(canvas)
     element.appendChild(title)
-    element.appendChild(document.createElement('br'))
     element.appendChild(description)
+    element.appendChild(document.createElement('br'))
     
     parentElement.appendChild(element)
 
     element.onclick = () => {
       pfp = drawing.id
-      if (selected) selected.classList.remove('outline')
-      selected.classList.add('no-outline')
-      selected = element
-      element.classList.add('outline')
-      element.classList.remove('no-outline')
+      if (selected) selected.remove()
+      const box = document.createElement('div')
+      box.classList.add('selected')
+      box.innerText = '✓'
+      element.appendChild(box)
+      selected = box
       updateProfile()
     }
 
     if (pfp == drawing.id) {
-      selected = element
-      element.classList.add('outline')
+      const box = document.createElement('div')
+      box.classList.add('selected')
+      box.innerText = '✓'
+      element.appendChild(box)
+      selected = box
     }
 
     load(drawing.data, canvas, canvas.getContext('2d'))
