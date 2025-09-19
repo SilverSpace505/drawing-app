@@ -14,6 +14,7 @@ body {
   aspect-ratio: 1;
   border-radius: 15px;
   color: rgba(255, 255, 255, 0.7);
+  cursor:default;
 }
 
 .drawing {
