@@ -11,6 +11,8 @@ const notLoggedIn = document.getElementById('notLoggedIn')
 const accountsBtn = document.getElementById('accountsBtn')
 const content = document.getElementById('content')
 
+let userId = null
+
 async function getName(id) {
   const {data, error} = await client
   .from('profiles')
@@ -55,7 +57,8 @@ account.onclick = () => {
 const {data} = await client.auth.getUser()
 
 function displayDrawings(drawings, parentElement) {
-    for (const drawing of drawings) {
+  parentElement.innerHTML = ""
+  for (const drawing of drawings) {
     const element = document.createElement('div')
     element.classList.add('drawing')
 
@@ -74,6 +77,16 @@ function displayDrawings(drawings, parentElement) {
     deleteBtn.classList.add('delete-btn')
     deleteBtn.textContent = 'Delete'
 
+    deleteBtn.onclick = async () => {
+      if (userId) {
+        const { error } = await client
+        .from('drawings')
+        .delete()
+        .eq('id', drawing.id)
+        refreshDrawings()
+      }
+    }
+
     element.appendChild(canvas)
     element.appendChild(deleteBtn)
     element.appendChild(title)
@@ -82,7 +95,7 @@ function displayDrawings(drawings, parentElement) {
     
     parentElement.appendChild(element)
 
-    element.onclick = () => {
+    canvas.onclick = () => {
       window.open(`../draw/?load=${drawing.id}`)
     }
 
@@ -90,14 +103,21 @@ function displayDrawings(drawings, parentElement) {
   }
 }
 
+async function refreshDrawings(id) {
+  const drawings = await getDrawings(data.user.id)
+
+  displayDrawings(drawings, drawingsContainer)
+}
+
 if (data.user) {
   const name = await getName(data.user.id)
 
   account.textContent = name;
 
-  const drawings = await getDrawings(data.user.id)
+  userId = data.user.id
 
-  displayDrawings(drawings, drawingsContainer)
+  refreshDrawings(data.user.id)
+
   content.style.display = 'block'
 } else {
   notLoggedIn.style.display = 'block'

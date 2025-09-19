@@ -59,6 +59,7 @@ body {
   position: absolute; 
   width: 100px;
   height: 80px;
+  z-index: 0;
 }
 
 .drawing-title {
@@ -77,4 +78,6 @@ body {
 .delete-btn {
   position: relative;
   left: 45px;
+  z-index: 2;
+  cursor: pointer;
 }
