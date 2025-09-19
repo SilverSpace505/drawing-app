@@ -57,7 +57,7 @@ async function getDrawings() {
 function displayDrawings(drawings, parentElement) {
   for (const drawing of drawings) {
     const element = document.createElement('div')
-    element.classList.add('drawing')
+    element.classList.add('drawing', 'no-outline')
 
     const title = document.createElement('span')
     title.classList.add('drawing-title')
@@ -80,8 +80,10 @@ function displayDrawings(drawings, parentElement) {
     element.onclick = () => {
       pfp = drawing.id
       if (selected) selected.classList.remove('outline')
+      selected.classList.add('no-outline')
       selected = element
       element.classList.add('outline')
+      element.classList.remove('no-outline')
       updateProfile()
     }
 
