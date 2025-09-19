@@ -82,7 +82,7 @@ function displayDrawings(drawings, parentElement) {
       if (selected) selected.remove()
       const box = document.createElement('div')
       box.classList.add('selected')
-      box.innerText = '✓'
+      box.innerText = '✔'
       element.appendChild(box)
       selected = box
       updateProfile()
@@ -91,7 +91,7 @@ function displayDrawings(drawings, parentElement) {
     if (pfp == drawing.id) {
       const box = document.createElement('div')
       box.classList.add('selected')
-      box.innerText = '✓'
+      box.innerText = '✔'
       element.appendChild(box)
       selected = box
     }
