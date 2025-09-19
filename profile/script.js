@@ -82,6 +82,7 @@ function displayDrawings(drawings, parentElement) {
       if (selected) selected.classList.remove('outline')
       selected = element
       element.classList.add('outline')
+      updateProfile()
     }
 
     if (pfp == drawing.id) {
