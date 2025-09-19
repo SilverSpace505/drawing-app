@@ -36,7 +36,7 @@ downloadBtn.onclick = async() => {
   // Filters
   .eq('name', downloadName.value)
 
-  load(data[0].data, canvas, ctx)
+  load(data[0].data, canvas, ctx, true)
 }
 
 const emailDisplay = document.getElementById('emailDisplay');
@@ -82,7 +82,7 @@ async function loadPfp(id) {
     .select("*")
     .eq('id', loadId)
     
-    if (data) load(data[0].data, canvas, ctx)
+    if (data) load(data[0].data, canvas, ctx, true)
   }
 })()
 
