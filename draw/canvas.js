@@ -133,37 +133,36 @@ function erase() {
 
 function fill() {
     if (drawing == true) {
-        ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
-        ctx.fillRect(mouseX, mouseY, 1, 1)
-
+        // ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
+        // ctx.fillRect(mouseX, mouseY, 1, 1)
+        var drawCoords = [mouseX, mouseY]
+        while (getPixelColor(drawCoords[0], drawCoords[1]) == getPixelColor(drawCoords[0], drawCoords[1] + 1)) {
+            console.log(mouseX)
+            while (getPixelColor(drawCoords[0], drawCoords[1]) == getPixelColor(drawCoords[0] + 1, drawCoords[1])) {
+                console.log("wee")
+                ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
+                ctx.fillRect(drawCoords[0], drawCoords[1], 1, 1)
+                drawCoords[0] += 1
+            }
+            // drawCoords[0] = mouseX
+            // while (getPixelColor(drawCoords[0], drawCoords[1]) == getPixelColor(drawCoords[0] - 1, drawCoords[1])) {
+            //     console.log("mee")
+            //     ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
+            //     ctx.fillRect(drawCoords[0], drawCoords[1], 1, 1)
+            //     drawCoords[0] -= 1
+            // }
+            // drawCoords[0] = mouseX
+            drawCoords[1] += 1
+        }
     }
 }
 
-// // Rhys helped with the saving and loading
-// function save() {
-//     return compressJSON(canvasData); // Turns data into a JSON
-// }
+// ChatGPT CODE STARTS HERE
+function getPixelColor(x, y) {
+    const imageData = ctx.getImageData(x, y, 1, 1); 
+    const [r, g, b, a] = imageData.data;
+    return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
+}
+// ChatGPT CODE ENDS HERE
 
-// function load(data) { // 'data' is a parameter which is handled by Rhys' code
-//     data = decompressJSON(data)
-//     canvasDataBreaks = data.length - 1
-//     canvasData = data
-//     console.log(data)
-//     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clears the canvas
-//     for (var l = 0; l < data.length; l++) {
-//         for (var i = 0; i < data[l].length; i++) {
-//             if (data[i] != "RELEASE") { // Redraws each line one by one with the same parameters as before
-//                 ctx.beginPath();
-//                 ctx.moveTo(data[l][i][0], data[l][i][1]);
-//                 ctx.lineTo(data[l][i][2], data[l][i][3]);
-//                 ctx.strokeStyle = data[l][i][4];
-//                 ctx.lineWidth = data[l][i][5];
-//                 ctx.lineCap = "round"
-//                 ctx.stroke();
-//             };
-//         };
-//     };
-// };
-
-// HENRY CODE ENDS HERE
 document.addEventListener('contextmenu', e => e.preventDefault()) // Removes right click menu - done by Sam
