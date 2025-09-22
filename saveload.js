@@ -47,7 +47,7 @@ function save() {
     return compressJSON(canvasData); // Turns data into a JSON
 }
 
-function load(data, canvas, ctx, override=false) { // 'data' is a parameter which is handled by Rhys' code
+function load(data, canvas, ctx, override=false) { 
     data = decompressJSON(data)
     if (override) {
       canvasDataBreaks = data.length - 1
