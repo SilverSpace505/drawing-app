@@ -99,7 +99,24 @@ function addToCanvas() {
         ctx.globalCompositeOperation = "destination-out"; // Sets the built-in 'canvas drawing mode' to only draw on top of existing elements
         erase();
     }
+    else if (tool == "bucket") {
+        ctx.globalCompositeOperation = "source-over";
+        fill();
+    }
 }
+
+function draw() { // Using 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
+    if (drawing == true) {
+        ctx.beginPath(); // These 4 lines draw a line on the canvas. Is is better to use lines rather than points because the framerate is capped at 60, leading to gaps in the mouse position updating.
+        ctx.moveTo(lastMouseX, lastMouseY); // Start position for the line
+        ctx.lineTo(mouseX, mouseY); // End position for the line
+        ctx.strokeStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")" // Colour of the line
+        ctx.lineWidth = brushSize.value; // Width of the line
+        ctx.lineCap = "round"; // Makes the lines appear circular and makes wide lines cleaner
+        ctx.stroke();
+        canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]); // Pushes the line parameters to the data for saving/loading
+    };
+};
 
 function erase() {
     if (drawing == true) {
@@ -114,18 +131,13 @@ function erase() {
     }
 };
 
-function draw() { // Using 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
+function fill() {
     if (drawing == true) {
-        ctx.beginPath(); // These 4 lines draw a line on the canvas. Is is better to use lines rather than points because the framerate is capped at 60, leading to gaps in the mouse position updating.
-        ctx.moveTo(lastMouseX, lastMouseY); // Start position for the line
-        ctx.lineTo(mouseX, mouseY); // End position for the line
-        ctx.strokeStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")" // Colour of the line
-        ctx.lineWidth = brushSize.value; // Width of the line
-        ctx.lineCap = "round"; // Makes the lines appear circular and makes wide lines cleaner
-        ctx.stroke();
-        canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]); // Pushes the line parameters to the data for saving/loading
-    };
-};
+        ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
+        ctx.fillRect(mouseX, mouseY, 1, 1)
+
+    }
+}
 
 // // Rhys helped with the saving and loading
 // function save() {
