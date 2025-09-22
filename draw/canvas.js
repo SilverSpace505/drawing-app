@@ -44,14 +44,7 @@ document.addEventListener('mousemove', function(event) { // Detects when the mou
     lastMouseY = mouseY; // Stores the previous mouse position
     mouseX = event.clientX - canvas.getBoundingClientRect().left; // Sets the mouse position to a variable. The mouse position is offset by the canvas position 
     mouseY = event.clientY - canvas.getBoundingClientRect().top; // because 'event.clientY' is based off of the canvas position rather than the absolute position.
-    if (tool == "pen") {
-        ctx.globalCompositeOperation = "source-over"; // Sets the built-in 'canvas drawing mode' to it's default
-        draw();
-    }
-    else if (tool == "eraser") {
-        ctx.globalCompositeOperation = "destination-out"; // Sets the built-in 'canvas drawing mode' to only draw on top of existing elements
-        erase();
-    }
+    addToCanvas()
 });
 
 document.addEventListener("keydown", detectCharacter); // Detects when a key is pressed down
@@ -81,6 +74,7 @@ canvas.onmousedown = function(event) { // This is called when the mouse is press
     rgbToHexConverter(brushColour.value)
     if (event.button == 0) { // Detects if it is left click
         drawing = true;
+        addToCanvas()
     };
 };
 
@@ -95,6 +89,17 @@ onmouseup = function(event) { // This is called when the mouse is released. 'eve
         };
     };
 };
+
+function addToCanvas() {
+    if (tool == "pen") {
+        ctx.globalCompositeOperation = "source-over"; // Sets the built-in 'canvas drawing mode' to it's default
+        draw();
+    }
+    else if (tool == "eraser") {
+        ctx.globalCompositeOperation = "destination-out"; // Sets the built-in 'canvas drawing mode' to only draw on top of existing elements
+        erase();
+    }
+}
 
 function erase() {
     if (drawing == true) {
