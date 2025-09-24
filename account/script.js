@@ -104,6 +104,11 @@ async function createAccount(email, password) {
     login(email, password)
   }
   else {
+    user = data.user 
+    if (!user) {
+      console.error('Signed up, but could not find a user. Please contact support.'); 
+      return;
+    }
     console.log(user.id, username.value)
     //create a new profile, since default supabase users cannot store a username and profile picture
     const {d, e} = await client
