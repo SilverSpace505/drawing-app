@@ -27,6 +27,8 @@ var lastMouseY;
 var colour = [];
 var opacity;
 
+var filledPixels = []
+
 function rgbToHexConverter(hex) {
     const r = parseInt(hex.slice(1, 3), 16); // These 3 lines get the rgb values from the hex code
     const g = parseInt(hex.slice(3, 5), 16);
@@ -136,33 +138,46 @@ function fill() {
         // ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
         // ctx.fillRect(mouseX, mouseY, 1, 1)
         var drawCoords = [mouseX, mouseY]
-        while (getPixelColor(drawCoords[0], drawCoords[1]) == getPixelColor(drawCoords[0], drawCoords[1] + 1)) {
-            console.log(mouseX)
-            while (getPixelColor(drawCoords[0], drawCoords[1]) == getPixelColor(drawCoords[0] + 1, drawCoords[1])) {
-                console.log("wee")
-                ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
-                ctx.fillRect(drawCoords[0], drawCoords[1], 1, 1)
-                drawCoords[0] += 1
-            }
-            // drawCoords[0] = mouseX
-            // while (getPixelColor(drawCoords[0], drawCoords[1]) == getPixelColor(drawCoords[0] - 1, drawCoords[1])) {
-            //     console.log("mee")
-            //     ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
-            //     ctx.fillRect(drawCoords[0], drawCoords[1], 1, 1)
-            //     drawCoords[0] -= 1
-            // }
-            // drawCoords[0] = mouseX
-            drawCoords[1] += 1
-        }
+        filledPixels
+
+        getOrthogonalPixels(drawCoords[0], drawCoords[1], null, getPixelColour(drawCoords[0], drawCoords[1]))
+
+        // for (i = 0; i < drawCoords.length - 1; i++) {
+        //     var intCoords = drawCoords[i].split(" ")
+        //     console.log(intCoords)
+        // }
     }
 }
 
 // ChatGPT CODE STARTS HERE
-function getPixelColor(x, y) {
+function getPixelColour(x, y) {
     const imageData = ctx.getImageData(x, y, 1, 1); 
     const [r, g, b, a] = imageData.data;
     return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
 }
 // ChatGPT CODE ENDS HERE
+function getOrthogonalPixels(x, y, ignore, colour) {
+    
+    if (colour == getPixelColour(x + 1, y) && ignore != 2 && filledPixels.includes(x + "," + (y + 1)) == false) {
+        console.log("DONT CRASH")
+        filledPixels.push((x + 1) + " " + y)
+        getOrthogonalPixels(x + 1, y, 1, colour)
+    }
+    if (colour == getPixelColour(x - 1, y) && ignore != 1 && filledPixels.includes(x + "," + (y + 1)) == false) {
+        console.log("DONT CRASH")
+        filledPixels.push((x - 1) + " " + y)
+        getOrthogonalPixels(x - 1, y, 2, colour)
+    }
+    if (colour == getPixelColour(x, y + 1) && ignore != 4 && filledPixels.includes(x + "," + (y + 1)) == false) {
+        console.log("DONT CRASH")
+        filledPixels.push(x + " " + (y + 1))
+        getOrthogonalPixels(x, y + 1, 3, colour)
+    }
+    if (colour == getPixelColour(x, y - 1) && ignore != 3 && filledPixels.includes(x + "," + (y + 1)) == false) {
+        console.log("DONT CRASH")
+        filledPixels.push(x + " " + (y - 1))
+        getOrthogonalPixels(x, y - 1, 4, colour)
+    }
+}
 
 document.addEventListener('contextmenu', e => e.preventDefault()) // Removes right click menu - done by Sam
