@@ -131,8 +131,8 @@ async function updateUI(data) {
     if (profileData != null) accName.innerText = profileData.name //no need to fetch twice - rate limits
     else accName.innerText = await getName(user.id) /*
     this returns the name, but it also sets profileData so I can use it any other time.
-    However, this might be a problem if the user wants to change their name, but for now the profile picture, username, etc. is on a
-    different page, so it will always be a fresh load of my page afterward.
+    However, this might be a problem if the user wants to change their name, but for now the profile picture, username, etc. 
+    is on a different page, so it will always be a fresh load of my page afterward.
     */
 }
 
