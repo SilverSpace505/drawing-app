@@ -124,6 +124,16 @@ function draw() { // Using 'event' as an argument is redundant, but it removes t
         ctx.lineWidth = brushSize.value; // Width of the line
         ctx.lineCap = "round"; // Makes the lines appear circular and makes wide lines cleaner
         ctx.stroke();
+        if (colour[3] != 1) {
+            console.log("sdsd")
+            ctx.globalCompositeOperation = "source-over";
+            ctx.beginPath()
+            ctx.arc(mouseX, mouseY, brushSize.value/4, 0, 2*Math.PI)
+            ctx.fillStyle = "rgba("+255+", "+0+", "+0+", "+colour[3]+")"
+            ctx.fill();
+            ctx.stroke();
+            // x + x * (1 - x)
+        }
         canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]); // Pushes the line parameters to the data for saving/loading
     };
 };
@@ -149,6 +159,12 @@ function fill() {
 
         // getOrthogonalPixels(drawCoords[0], drawCoords[1], null, getPixelColour(drawCoords[0], drawCoords[1])) // 'getOrthogonalPixels' detects all pixels which need to be filled, though it is quite buggy
         floodFill(drawCoords[0], drawCoords[1], getPixelColour(drawCoords[0], drawCoords[1])) // 'floodFill' is like 'getOrthogonalPixels' but made by ChatGPT and more optimized 
+
+        ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
+        for (i = 0; i < filledPixels.length - 1; i++) {
+            var intCoords = filledPixels[i].split(" ")
+            ctx.fillRect(intCoords[0], intCoords[1], 1, 1)
+        }
     }
 }
 
@@ -158,7 +174,6 @@ function getPixelColour(x, y) {
     const [r, g, b, a] = imageData.data;
     return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
 }
-// ChatGPT CODE ENDS HERE
 
 // function getOrthogonalPixels(x, y, ignore, colour) {
     
