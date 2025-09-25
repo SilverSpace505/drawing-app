@@ -1,3 +1,4 @@
+var filledPixels = []
 //ChatGPT compression using pako.js library
 // Compress any JSON-serializable object
 function compressJSON(obj) {
@@ -47,13 +48,12 @@ function save() {
     return compressJSON(canvasData); // Turns data into a JSON
 }
 
-function load(data, canvas, ctx, override=false) { // 'data' is a parameter which is handled by Rhys' code
+function load(data, canvas, ctx, override=false) { 
     data = decompressJSON(data)
     if (override) {
       canvasDataBreaks = data.length - 1
       canvasData = data
     }
-    // console.log(data)
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clears the canvas
     ctx.save()
     ctx.scale(canvas.width / 1800, canvas.height / 968)
@@ -62,7 +62,6 @@ function load(data, canvas, ctx, override=false) { // 'data' is a parameter whic
         if (data[l][0] == "pen") {
             ctx.globalCompositeOperation = "source-over";
             for (var i = 0; i < data[l].length; i++) {
-                // console.log('pen')
                 ctx.beginPath();
                 ctx.moveTo(data[l][i][0], data[l][i][1]);
                 ctx.lineTo(data[l][i][2], data[l][i][3]);
@@ -75,7 +74,6 @@ function load(data, canvas, ctx, override=false) { // 'data' is a parameter whic
         else if (data[l][0] == "eraser") {
             ctx.globalCompositeOperation = "destination-out";
             for (var i = 0; i < data[l].length; i++) {
-                // console.log('eraser')
                 ctx.beginPath();
                 ctx.moveTo(data[l][i][0], data[l][i][1]);
                 ctx.lineTo(data[l][i][2], data[l][i][3]);
@@ -85,7 +83,53 @@ function load(data, canvas, ctx, override=false) { // 'data' is a parameter whic
                 ctx.stroke();
             }
         }
+        else if (data[l][0] == "bucket") {
+            ctx.globalCompositeOperation = "source-over";
+            filledPixels = []
+            floodFill(data[l][1][0], data[l][1][1], data [l][1][2])
+            ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
+            for (i = 0; i < filledPixels.length - 1; i++) {
+                var intCoords = filledPixels[i].split(" ")
+                ctx.fillRect(intCoords[0], intCoords[1], 1, 1)
+            }
+        }
     };
     // HENRY CODE ENDS HERE
     ctx.restore()
 };
+
+
+// ChatGPT CODE STARTS HERE
+function floodFill(startX, startY, targetColour) {
+    const stack = [[startX, startY]];
+    const key = (x, y) => `${x} ${y}`;
+    const visited = new Set();
+
+    while (stack.length > 0) {
+        const [x, y] = stack.pop();
+
+        // Skip if already visited
+        if (visited.has(key(x, y))) continue;
+        visited.add(key(x, y));
+
+        // Skip if not target colour
+        if (getPixelColour(x, y) !== targetColour) continue;
+
+        // Mark / fill pixel
+        filledPixels.push(key(x, y));
+
+        // Push orthogonal neighbours
+        stack.push([x + 1, y]);
+        stack.push([x - 1, y]);
+        stack.push([x, y + 1]);
+        stack.push([x, y - 1]);
+    }
+    // console.log(filledPixels)
+}
+
+function getPixelColour(x, y) {
+    const imageData = ctx.getImageData(x, y, 1, 1); 
+    const [r, g, b, a] = imageData.data;
+    return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
+}
+// ChatGPT CODE ENDS HERE
