@@ -141,13 +141,6 @@ function fill() {
 
         // getOrthogonalPixels(drawCoords[0], drawCoords[1], null, getPixelColour(drawCoords[0], drawCoords[1])) // 'getOrthogonalPixels' detects all pixels which need to be filled, though it is quite buggy
         floodFill(drawCoords[0], drawCoords[1], getPixelColour(drawCoords[0], drawCoords[1])) // 'floodFill' is like 'getOrthogonalPixels' but made by ChatGPT and more optimized 
-
-        ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
-        for (i = 0; i < filledPixels.length - 1; i++) {
-            var intCoords = filledPixels[i].split(" ")
-            // console.log(intCoords)
-            ctx.fillRect(intCoords[0], intCoords[1], 1, 1)
-        }
     }
 }
 
@@ -184,10 +177,11 @@ function getPixelColour(x, y) {
 // }
 
 // ChatGPT CODE STARTS HERE
-function floodFill(startX, startY, targetColour) {
+async function floodFill(startX, startY, targetColour) {
     const stack = [[startX, startY]];
     const key = (x, y) => `${x} ${y}`;
     const visited = new Set();
+    let start = performance.now()
 
     while (stack.length > 0) {
         const [x, y] = stack.pop();
@@ -207,8 +201,24 @@ function floodFill(startX, startY, targetColour) {
         stack.push([x - 1, y]);
         stack.push([x, y + 1]);
         stack.push([x, y - 1]);
+        if (performance.now() - start > 5) {
+          finishFloodfill()
+          await new Promise(resolve => setTimeout(resolve, 1000 / 60))
+          start = performance.now()
+        }
     }
+    finishFloodfill()
 }
 // ChatGPT CODE ENDS HERE
+
+function finishFloodfill() {
+  ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
+  for (i = 0; i < filledPixels.length - 1; i++) {
+      var intCoords = filledPixels[i].split(" ")
+      // console.log(intCoords)
+      ctx.fillRect(intCoords[0], intCoords[1], 1, 1)
+  }
+}
+
 
 document.addEventListener('contextmenu', e => e.preventDefault()) // Removes right click menu - done by Sam
