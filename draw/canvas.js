@@ -158,22 +158,22 @@ function getPixelColour(x, y) {
 // ChatGPT CODE ENDS HERE
 function getOrthogonalPixels(x, y, ignore, colour) {
     
-    if (colour == getPixelColour(x + 1, y) && ignore != 2 && filledPixels.includes(x + "," + (y + 1)) == false) {
+    if (colour == getPixelColour(x + 1, y) && ignore != 2 && filledPixels.includes(x + " " + (y + 1)) == false) {
         console.log("DONT CRASH")
         filledPixels.push((x + 1) + " " + y)
         getOrthogonalPixels(x + 1, y, 1, colour)
     }
-    if (colour == getPixelColour(x - 1, y) && ignore != 1 && filledPixels.includes(x + "," + (y + 1)) == false) {
+    if (colour == getPixelColour(x - 1, y) && ignore != 1 && filledPixels.includes(x + " " + (y + 1)) == false) {
         console.log("DONT CRASH")
         filledPixels.push((x - 1) + " " + y)
         getOrthogonalPixels(x - 1, y, 2, colour)
     }
-    if (colour == getPixelColour(x, y + 1) && ignore != 4 && filledPixels.includes(x + "," + (y + 1)) == false) {
+    if (colour == getPixelColour(x, y + 1) && ignore != 4 && filledPixels.includes(x + " " + (y + 1)) == false) {
         console.log("DONT CRASH")
         filledPixels.push(x + " " + (y + 1))
         getOrthogonalPixels(x, y + 1, 3, colour)
     }
-    if (colour == getPixelColour(x, y - 1) && ignore != 3 && filledPixels.includes(x + "," + (y + 1)) == false) {
+    if (colour == getPixelColour(x, y - 1) && ignore != 3 && filledPixels.includes(x + " " + (y + 1)) == false) {
         console.log("DONT CRASH")
         filledPixels.push(x + " " + (y - 1))
         getOrthogonalPixels(x, y - 1, 4, colour)
