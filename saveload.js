@@ -85,7 +85,56 @@ function load(data, canvas, ctx, override=false) {
                 ctx.stroke();
             }
         }
+        else if (data[l][0] == "bucket") {
+            ctx.globalCompositeOperation = "source-over";
+            var filledPixels = []
+            floodFill(data[l][1][0], data[l][1][1], data [l][1][2])
+            console.log(filledPixels)
+            ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
+            for (i = 0; i < filledPixels.length - 1; i++) {
+                console.log("asdasdasd")
+                var intCoords = filledPixels[i].split(" ")
+                ctx.fillRect(intCoords[0], intCoords[1], 1, 1)
+            }
+        }
     };
     // HENRY CODE ENDS HERE
     ctx.restore()
 };
+
+
+// ChatGPT CODE STARTS HERE
+function floodFill(startX, startY, targetColour) {
+    console.log("WEWEWE")
+    const stack = [[startX, startY]];
+    const key = (x, y) => `${x} ${y}`;
+    const visited = new Set();
+
+    while (stack.length > 0) {
+        const [x, y] = stack.pop();
+
+        // Skip if already visited
+        if (visited.has(key(x, y))) continue;
+        visited.add(key(x, y));
+
+        // Skip if not target colour
+        if (getPixelColour(x, y) !== targetColour) continue;
+
+        // Mark / fill pixel
+        filledPixels.push(key(x, y));
+
+        // Push orthogonal neighbours
+        stack.push([x + 1, y]);
+        stack.push([x - 1, y]);
+        stack.push([x, y + 1]);
+        stack.push([x, y - 1]);
+    }
+    // console.log(filledPixels)
+}
+
+function getPixelColour(x, y) {
+    const imageData = ctx.getImageData(x, y, 1, 1); 
+    const [r, g, b, a] = imageData.data;
+    return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
+}
+// ChatGPT CODE ENDS HERE
