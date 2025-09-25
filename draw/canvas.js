@@ -8,7 +8,7 @@ const brushColour = document.getElementById("brushColour");
 const brushSize = document.getElementById("brushSize");
 const brushOpacity = document.getElementById("opacity");
 const canvas = document.getElementById("canvas"); // Canvas which user draws on
-const ctx = canvas.getContext("2d"); // 
+const ctx = canvas.getContext("2d", {willReadFrequently: true}); // 
 
 var tool = 'pen';
 var drawing = false;
@@ -167,10 +167,36 @@ function getPixelColour(x, y) {
     return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
 }
 
-function floodFill(startX, startY, targetColour) {
+// function getOrthogonalPixels(x, y, ignore, colour) {
+    
+//     if (colour == getPixelColour(x + 1, y) && ignore != 2 && filledPixels.includes(x + " " + (y + 1)) == false) {
+//         // console.log("DONT CRASH")
+//         filledPixels.push((x + 1) + " " + y)
+//         getOrthogonalPixels(x + 1, y, 1, colour)
+//     }
+//     if (colour == getPixelColour(x - 1, y) && ignore != 1 && filledPixels.includes(x + " " + (y + 1)) == false) {
+//         // console.log("DONT CRASH")
+//         filledPixels.push((x - 1) + " " + y)
+//         getOrthogonalPixels(x - 1, y, 2, colour)
+//     }
+//     if (colour == getPixelColour(x, y + 1) && ignore != 4 && filledPixels.includes(x + " " + (y + 1)) == false) {
+//         // console.log("DONT CRASH")
+//         filledPixels.push(x + " " + (y + 1))
+//         getOrthogonalPixels(x, y + 1, 3, colour)
+//     }
+//     if (colour == getPixelColour(x, y - 1) && ignore != 3 && filledPixels.includes(x + " " + (y + 1)) == false) {
+//         // console.log("DONT CRASH")
+//         filledPixels.push(x + " " + (y - 1))
+//         getOrthogonalPixels(x, y - 1, 4, colour)
+//     }
+// }
+
+// ChatGPT CODE STARTS HERE
+async function floodFill(startX, startY, targetColour) {
     const stack = [[startX, startY]];
     const key = (x, y) => `${x} ${y}`;
     const visited = new Set();
+    let start = performance.now()
 
     while (stack.length > 0) {
         const [x, y] = stack.pop();
@@ -190,8 +216,24 @@ function floodFill(startX, startY, targetColour) {
         stack.push([x - 1, y]);
         stack.push([x, y + 1]);
         stack.push([x, y - 1]);
+        if (performance.now() - start > 5) {
+          finishFloodfill()
+          await new Promise(resolve => setTimeout(resolve, 1000 / 60))
+          start = performance.now()
+        }
     }
+    finishFloodfill()
 }
 // ChatGPT CODE ENDS HERE
+
+function finishFloodfill() {
+  ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
+  for (i = 0; i < filledPixels.length - 1; i++) {
+      var intCoords = filledPixels[i].split(" ")
+      // console.log(intCoords)
+      ctx.fillRect(intCoords[0], intCoords[1], 1, 1)
+  }
+}
+
 
 document.addEventListener('contextmenu', e => e.preventDefault()) // Removes right click menu - done by Sam
