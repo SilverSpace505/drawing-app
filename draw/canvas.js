@@ -138,14 +138,17 @@ function fill() {
         // ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
         // ctx.fillRect(mouseX, mouseY, 1, 1)
         var drawCoords = [mouseX, mouseY]
-        filledPixels
+        filledPixels = []
 
-        getOrthogonalPixels(drawCoords[0], drawCoords[1], null, getPixelColour(drawCoords[0], drawCoords[1]))
+        // getOrthogonalPixels(drawCoords[0], drawCoords[1], null, getPixelColour(drawCoords[0], drawCoords[1])) // 'getOrthogonalPixels' detects all pixels which need to be filled
+        floodFill(drawCoords[0], drawCoords[1], getPixelColour(drawCoords[0], drawCoords[1])) // 'floodFill' is like 'getOrthogonalPixels' but made by ChatGPT and more organized 
 
-        // for (i = 0; i < drawCoords.length - 1; i++) {
-        //     var intCoords = drawCoords[i].split(" ")
-        //     console.log(intCoords)
-        // }
+        ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
+        for (i = 0; i < filledPixels.length - 1; i++) {
+            var intCoords = filledPixels[i].split(" ")
+            // console.log(intCoords)
+            ctx.fillRect(intCoords[0], intCoords[1], 1, 1)
+        }
     }
 }
 
@@ -156,28 +159,57 @@ function getPixelColour(x, y) {
     return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
 }
 // ChatGPT CODE ENDS HERE
+
 function getOrthogonalPixels(x, y, ignore, colour) {
     
     if (colour == getPixelColour(x + 1, y) && ignore != 2 && filledPixels.includes(x + " " + (y + 1)) == false) {
-        console.log("DONT CRASH")
+        // console.log("DONT CRASH")
         filledPixels.push((x + 1) + " " + y)
         getOrthogonalPixels(x + 1, y, 1, colour)
     }
     if (colour == getPixelColour(x - 1, y) && ignore != 1 && filledPixels.includes(x + " " + (y + 1)) == false) {
-        console.log("DONT CRASH")
+        // console.log("DONT CRASH")
         filledPixels.push((x - 1) + " " + y)
         getOrthogonalPixels(x - 1, y, 2, colour)
     }
     if (colour == getPixelColour(x, y + 1) && ignore != 4 && filledPixels.includes(x + " " + (y + 1)) == false) {
-        console.log("DONT CRASH")
+        // console.log("DONT CRASH")
         filledPixels.push(x + " " + (y + 1))
         getOrthogonalPixels(x, y + 1, 3, colour)
     }
     if (colour == getPixelColour(x, y - 1) && ignore != 3 && filledPixels.includes(x + " " + (y + 1)) == false) {
-        console.log("DONT CRASH")
+        // console.log("DONT CRASH")
         filledPixels.push(x + " " + (y - 1))
         getOrthogonalPixels(x, y - 1, 4, colour)
     }
 }
+
+// ChatGPT CODE STARTS HERE
+function floodFill(startX, startY, targetColour) {
+    const stack = [[startX, startY]];
+    const key = (x, y) => `${x} ${y}`;
+    const visited = new Set();
+
+    while (stack.length > 0) {
+        const [x, y] = stack.pop();
+
+        // Skip if already visited
+        if (visited.has(key(x, y))) continue;
+        visited.add(key(x, y));
+
+        // Skip if not target colour
+        if (getPixelColour(x, y) !== targetColour) continue;
+
+        // Mark / fill pixel
+        filledPixels.push(key(x, y));
+
+        // Push orthogonal neighbours
+        stack.push([x + 1, y]);
+        stack.push([x - 1, y]);
+        stack.push([x, y + 1]);
+        stack.push([x, y - 1]);
+    }
+}
+// ChatGPT CODE ENDS HERE
 
 document.addEventListener('contextmenu', e => e.preventDefault()) // Removes right click menu - done by Sam
