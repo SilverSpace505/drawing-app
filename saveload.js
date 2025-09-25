@@ -1,3 +1,4 @@
+var filledPixels = []
 //ChatGPT compression using pako.js library
 // Compress any JSON-serializable object
 function compressJSON(obj) {
@@ -53,7 +54,6 @@ function load(data, canvas, ctx, override=false) {
       canvasDataBreaks = data.length - 1
       canvasData = data
     }
-    // console.log(data)
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clears the canvas
     ctx.save()
     ctx.scale(canvas.width / 1800, canvas.height / 968)
@@ -62,7 +62,6 @@ function load(data, canvas, ctx, override=false) {
         if (data[l][0] == "pen") {
             ctx.globalCompositeOperation = "source-over";
             for (var i = 0; i < data[l].length; i++) {
-                // console.log('pen')
                 ctx.beginPath();
                 ctx.moveTo(data[l][i][0], data[l][i][1]);
                 ctx.lineTo(data[l][i][2], data[l][i][3]);
@@ -75,7 +74,6 @@ function load(data, canvas, ctx, override=false) {
         else if (data[l][0] == "eraser") {
             ctx.globalCompositeOperation = "destination-out";
             for (var i = 0; i < data[l].length; i++) {
-                // console.log('eraser')
                 ctx.beginPath();
                 ctx.moveTo(data[l][i][0], data[l][i][1]);
                 ctx.lineTo(data[l][i][2], data[l][i][3]);
@@ -87,12 +85,10 @@ function load(data, canvas, ctx, override=false) {
         }
         else if (data[l][0] == "bucket") {
             ctx.globalCompositeOperation = "source-over";
-            var filledPixels = []
+            filledPixels = []
             floodFill(data[l][1][0], data[l][1][1], data [l][1][2])
-            console.log(filledPixels)
             ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
             for (i = 0; i < filledPixels.length - 1; i++) {
-                console.log("asdasdasd")
                 var intCoords = filledPixels[i].split(" ")
                 ctx.fillRect(intCoords[0], intCoords[1], 1, 1)
             }
@@ -105,7 +101,6 @@ function load(data, canvas, ctx, override=false) {
 
 // ChatGPT CODE STARTS HERE
 function floodFill(startX, startY, targetColour) {
-    console.log("WEWEWE")
     const stack = [[startX, startY]];
     const key = (x, y) => `${x} ${y}`;
     const visited = new Set();
