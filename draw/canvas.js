@@ -8,7 +8,7 @@ const brushColour = document.getElementById("brushColour");
 const brushSize = document.getElementById("brushSize");
 const brushOpacity = document.getElementById("opacity");
 const canvas = document.getElementById("canvas"); // Canvas which user draws on
-const ctx = canvas.getContext("2d"); // 
+const ctx = canvas.getContext("2d", {willReadFrequently: true}); // 
 
 var tool = 'pen';
 var drawing = false;
