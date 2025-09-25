@@ -41,6 +41,24 @@ function changeTool(newTool) { // Different arguments from HTML buttons
     tool = newTool;
 }
 
+function undo() {
+    var redone = []; // The thing that is being undone
+    for (var i = 0; i < canvasData[canvasDataBreaks - 1].length; i++) {
+        redone.push(canvasData[canvasDataBreaks - 1][i]); // Pushes all of the data which is about to be removed from 'canvasData' to 'redone'
+    }
+    canvasData.splice(canvasDataBreaks - 1, 1); // Because the final index is always a blank array, this erases the last array which actually has data
+    redoStorage.push(redone); // Pushing 'redone' into 'redoStorage' puts all of the data in a single index, which makes it easier to handle
+    canvasDataBreaks -= 1; 
+    load(compressJSON(canvasData), canvas, ctx, true); // Loads the canvas, now with everything up to the 2nd most recent 'RELEASE' deleted
+}
+
+function redo() {
+    canvasData.splice(canvasData.length - 1, 0, redoStorage[(redoStorage.length - 1)])
+    redoStorage.splice(redoStorage.length - 1, 1); // Removes 'redone' from 'redoStorage'
+    canvasDataBreaks += 1;
+    load(compressJSON(canvasData), canvas, ctx, true); // Loads the canvas, now with the 'redone' data added
+}
+
 document.addEventListener('mousemove', function(event) { // Detects when the mouse moves
     lastMouseX = mouseX; // Stores the previous mouse position
     lastMouseY = mouseY; // Stores the previous mouse position
@@ -53,20 +71,10 @@ document.addEventListener("keydown", detectCharacter); // Detects when a key is 
 function detectCharacter(character) { // Is called when a key is pressed down
     if (character.ctrlKey == true) { //Is the control key pressed?
         if (character.key == "z" && canvasData.length > 1) { // Is the 'z' key pressed?
-            var redone = []; // The thing that is being undone
-            for (var i = 0; i < canvasData[canvasDataBreaks - 1].length; i++) {
-                redone.push(canvasData[canvasDataBreaks - 1][i]); // Pushes all of the data which is about to be removed from 'canvasData' to 'redone'
-            }
-            canvasData.splice(canvasDataBreaks - 1, 1); // Because the final index is always a blank array, this erases the last array which actually has data
-            redoStorage.push(redone); // Pushing 'redone' into 'redoStorage' puts all of the data in a single index, which makes it easier to handle
-            canvasDataBreaks -= 1; 
-            load(compressJSON(canvasData), canvas, ctx, true); // Loads the canvas, now with everything up to the 2nd most recent 'RELEASE' deleted
+            undo()
         }
         else if (character.key == "y" && redoStorage.length != 0) { // Is the 'y' key pressed?
-            canvasData.splice(canvasData.length - 1, 0, redoStorage[(redoStorage.length - 1)])
-            redoStorage.splice(redoStorage.length - 1, 1); // Removes 'redone' from 'redoStorage'
-            canvasDataBreaks += 1;
-            load(compressJSON(canvasData), canvas, ctx, true); // Loads the canvas, now with the 'redone' data added
+            redo()
         };
     };
 };
