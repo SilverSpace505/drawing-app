@@ -24,14 +24,19 @@ async function getDrawings() {
 
 function makeTheDrawings(){
 const drawArea = document.getElementById('viewDrawings')
-//add broader to drawings
-// show drawing makers name
+
+//show drawing makers name
   //loop over eacg element in the array
   for(var i=0; i<drawData.length;i++){
     //create a canvas area and name it
+    const div=document.createElement("div")
     const canvas = document.createElement('canvas')
-    canvas.classList.add('drawing-canvas')  
-    drawArea.append(canvas);
+    div.classList.add('drawing')  
+    const title=document.createElement("span") 
+    title.textContent=drawData[i].name 
+    div.append(title)
+    div.append(canvas);
+    drawArea.append(div)
     load(drawData[i].data, canvas, canvas.getContext('2d'))
   }
 }
