@@ -146,6 +146,15 @@ loadFileBtn.onclick = () => {
 function exportImg() {
   let url = canvas.toDataURL("image/png");
   let tab = window.open('about:blank', 'Exported Image')
-  
+
   tab.document.body.innerHTML = `<img src="${url}" style="width: 100%; height: 100%;"/>`
+}
+
+function emojify() {
+  document.getElementById('brushColourLabel').innerText = '🎨'
+  document.getElementById('widthDiv').textContent = '↔'
+  document.getElementById('opacityDiv').textContent = '👓'
+  document.getElementById('toolBtn').textContent = '🛠'
+  document.getElementById('pen').textContent = '✏'
+  document.getElementById('eraser').textContent = '💢'
 }
