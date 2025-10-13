@@ -115,7 +115,7 @@ function addToCanvas() {
     }
 }
 
-function draw() { // Using 'event' as an argument is redundant, but it removes the 'deprecated' alerts.
+function draw() {
     if (drawing == true) {
         ctx.beginPath(); // These 4 lines draw a line on the canvas. Is is better to use lines rather than points because the framerate is capped at 60, leading to gaps in the mouse position updating.
         ctx.moveTo(lastMouseX, lastMouseY); // Start position for the line
@@ -125,13 +125,14 @@ function draw() { // Using 'event' as an argument is redundant, but it removes t
         ctx.lineCap = "round"; // Makes the lines appear circular and makes wide lines cleaner
         ctx.stroke();
         if (colour[3] != 1) {
-            console.log("sdsd")
-            ctx.globalCompositeOperation = "source-over";
+            // console.log("sdsd")
+            // ctx.globalCompositeOperation = "luminosity";
+            ctx.globalCompositeOperation = "destination-out";
             ctx.beginPath()
-            ctx.arc(mouseX, mouseY, brushSize.value/4, 0, 2*Math.PI)
-            ctx.fillStyle = "rgba("+255+", "+0+", "+0+", "+colour[3]+")"
+            ctx.arc(mouseX, mouseY, brushSize.value/2, 0, 2*Math.PI)
+            ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+1+")"
             ctx.fill();
-            ctx.stroke();
+            // ctx.stroke();
             // x + x * (1 - x)
         }
         canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]); // Pushes the line parameters to the data for saving/loading
@@ -174,6 +175,7 @@ function getPixelColour(x, y) {
     const [r, g, b, a] = imageData.data;
     return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
 }
+// ChatGPT CODE ENDS HERE
 
 // function getOrthogonalPixels(x, y, ignore, colour) {
     
@@ -226,7 +228,7 @@ async function floodFill(startX, startY, targetColour) {
         stack.push([x, y - 1]);
         if (performance.now() - start > 5) {
           finishFloodfill()
-          await new Promise(resolve => setTimeout(resolve, 1000 / 60))
+          await new Promise(resolve => setTimeout(resolve, 1000 / 60)) // Rhys did this to make it look cooler and not crash the website
           start = performance.now()
         }
     }
