@@ -75,7 +75,10 @@ function displayDrawings(drawings, parentElement) {
 
     const deleteBtn = document.createElement('button')
     deleteBtn.classList.add('delete-btn')
-    deleteBtn.textContent = 'Delete'
+    deleteBtn.textContent = '🗑️'
+
+    const textDiv = document.createElement('div')
+    textDiv.classList.add('textDiv')
 
     deleteBtn.onclick = async () => {
       if (userId) {
@@ -89,9 +92,10 @@ function displayDrawings(drawings, parentElement) {
 
     element.appendChild(canvas)
     element.appendChild(deleteBtn)
-    element.appendChild(title)
-    element.appendChild(document.createElement('br'))
-    element.appendChild(description)
+    element.appendChild(textDiv)
+    textDiv.appendChild(title)
+    textDiv.appendChild(document.createElement('br'))
+    textDiv.appendChild(description)
     
     parentElement.appendChild(element)
 
