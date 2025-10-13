@@ -146,5 +146,6 @@ loadFileBtn.onclick = () => {
 function exportImg() {
   let url = canvas.toDataURL("image/png");
   let tab = window.open('about:blank', 'Exported Image')
+  
   tab.document.body.innerHTML = `<img src="${url}" style="width: 100%; height: 100%;"/>`
 }
