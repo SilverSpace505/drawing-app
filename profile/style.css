@@ -55,5 +55,5 @@ canvas {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 2.8vw;
+  gap: 25px;
 }

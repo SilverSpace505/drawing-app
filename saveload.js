@@ -1,3 +1,4 @@
+var colour = []
 var filledPixels = []
 //ChatGPT compression using pako.js library
 // Compress any JSON-serializable object
@@ -62,13 +63,25 @@ function load(data, canvas, ctx, override=false) {
         if (data[l][0] == "pen") {
             ctx.globalCompositeOperation = "source-over";
             for (var i = 0; i < data[l].length; i++) {
-                ctx.beginPath();
-                ctx.moveTo(data[l][i][0], data[l][i][1]);
-                ctx.lineTo(data[l][i][2], data[l][i][3]);
-                ctx.strokeStyle = data[l][i][4];
-                ctx.lineWidth = data[l][i][5];
-                ctx.lineCap = "round"
-                ctx.stroke();
+                if (data[l][i][4] != undefined) {
+                    console.log(data[l][i][4])
+                    // rgbToHexConverter(data[l][i][4], data[l][i][6])
+                    ctx.beginPath();
+                    ctx.moveTo(data[l][i][0], data[l][i][1]);
+                    ctx.lineTo(data[l][i][2], data[l][i][3]);
+                    ctx.strokeStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")"
+                    ctx.lineWidth = data[l][i][5];
+                    ctx.lineCap = "round"
+                    ctx.stroke();
+                    if (colour[3] != 1) {
+                        ctx.globalCompositeOperation = "destination-out";
+                        ctx.beginPath()
+                        ctx.arc(data[l][i][2], data[l][i][3], data[l][i][5]/2, 0, 2*Math.PI)
+                        ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+1+")"
+                        ctx.fill();
+                        ctx.globalCompositeOperation = "source-over";
+                    }
+                }
             }
         }
         else if (data[l][0] == "eraser") {
@@ -94,10 +107,17 @@ function load(data, canvas, ctx, override=false) {
             }
         }
     };
-    // HENRY CODE ENDS HERE
     ctx.restore()
 };
 
+function rgbToHexConverter(hex, opacity) { // Contrary to the name, this converts hex codes to rgb values and sets the colour array to the rgba values
+    const r = parseInt(hex.slice(1, 3), 16); // These 3 lines get the rgb values from the hex code
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    colour = []; // Clears the 'colour' array for it to be updated
+    colour.push(r, g, b, parseFloat(Math.abs(1-opacity))); // Updates the 'colour' array to have the new rgba values 
+};
+// HENRY CODE ENDS HERE
 
 // ChatGPT CODE STARTS HERE
 function floodFill(startX, startY, targetColour) {
