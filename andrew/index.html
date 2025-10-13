@@ -15,6 +15,11 @@
    <h1 class="title">
        View our Drawings 
     </h1>
+    <input type="text" name="search" id="search" placeholder="search">
+    <button onclick="searchdrawings()" type="button">search</button>   
+    <button onclick="getDrawings()" type="button">Fetch Drawings</button>   
+
+    <h1 class="title"></h1>   
     <div id="viewDrawings"></div>
      <script type="module">
         import pako from 'https://cdn.jsdelivr.net/npm/pako@2.1.0/+esm'
@@ -23,4 +28,7 @@
     <script src="../saveload.js"></script>  
     <script src="script.js"></script> 
     <body>
-</html>
+</html> 
+<!-- nothing after this -->
+
+    
