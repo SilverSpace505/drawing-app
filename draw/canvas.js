@@ -25,11 +25,18 @@ var lastMouseX;
 var lastMouseY;
 
 var colour = [];
-var opacity;
 
 var filledPixels = []
 
-function rgbToHexConverter(hex) {
+document.addEventListener('mousemove', function(event) { // Detects when the mouse moves
+    lastMouseX = mouseX; // Stores the previous mouse position
+    lastMouseY = mouseY; // Stores the previous mouse position
+    mouseX = event.clientX - canvas.getBoundingClientRect().left; // Sets the mouse position to a variable. The mouse position is offset by the canvas position 
+    mouseY = event.clientY - canvas.getBoundingClientRect().top; // because 'event.clientY' is based off of the canvas position rather than the absolute position.
+    addToCanvas()
+});
+
+function rgbToHexConverter(hex) { // Contrary to the name, this converts hex codes to rgb values and sets the colour array to the rgba values
     const r = parseInt(hex.slice(1, 3), 16); // These 3 lines get the rgb values from the hex code
     const g = parseInt(hex.slice(3, 5), 16);
     const b = parseInt(hex.slice(5, 7), 16);
@@ -58,14 +65,6 @@ function redo() {
     canvasDataBreaks += 1;
     load(compressJSON(canvasData), canvas, ctx, true); // Loads the canvas, now with the 'redone' data added
 }
-
-document.addEventListener('mousemove', function(event) { // Detects when the mouse moves
-    lastMouseX = mouseX; // Stores the previous mouse position
-    lastMouseY = mouseY; // Stores the previous mouse position
-    mouseX = event.clientX - canvas.getBoundingClientRect().left; // Sets the mouse position to a variable. The mouse position is offset by the canvas position 
-    mouseY = event.clientY - canvas.getBoundingClientRect().top; // because 'event.clientY' is based off of the canvas position rather than the absolute position.
-    addToCanvas()
-});
 
 document.addEventListener("keydown", detectCharacter); // Detects when a key is pressed down
 function detectCharacter(character) { // Is called when a key is pressed down
@@ -135,7 +134,7 @@ function draw() {
             // ctx.stroke();
             // x + x * (1 - x)
         }
-        canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value]); // Pushes the line parameters to the data for saving/loading
+        canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value, brushOpacity.value]); // Pushes the line parameters to the data for saving/loading
     };
 };
 
@@ -161,7 +160,7 @@ function fill() {
         // getOrthogonalPixels(drawCoords[0], drawCoords[1], null, getPixelColour(drawCoords[0], drawCoords[1])) // 'getOrthogonalPixels' detects all pixels which need to be filled, though it is quite buggy
         floodFill(drawCoords[0], drawCoords[1], getPixelColour(drawCoords[0], drawCoords[1])) // 'floodFill' is like 'getOrthogonalPixels' but made by ChatGPT and more optimized 
 
-        ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
+        ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+")";
         for (i = 0; i < filledPixels.length - 1; i++) {
             var intCoords = filledPixels[i].split(" ")
             ctx.fillRect(intCoords[0], intCoords[1], 1, 1)
@@ -237,7 +236,7 @@ async function floodFill(startX, startY, targetColour) {
 // ChatGPT CODE ENDS HERE
 
 function finishFloodfill() {
-  ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+colour[3]+")";
+  ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+")";
   for (i = 0; i < filledPixels.length - 1; i++) {
       var intCoords = filledPixels[i].split(" ")
       // console.log(intCoords)
