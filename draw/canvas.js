@@ -169,11 +169,13 @@ function fill() {
     }
 }
 
+// ChatGPT CODE STARTS HERE
 function getPixelColour(x, y) {
     const imageData = ctx.getImageData(x, y, 1, 1); 
     const [r, g, b, a] = imageData.data;
     return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
 }
+// ChatGPT CODE ENDS HERE
 
 // function getOrthogonalPixels(x, y, ignore, colour) {
     
@@ -226,7 +228,7 @@ async function floodFill(startX, startY, targetColour) {
         stack.push([x, y - 1]);
         if (performance.now() - start > 5) {
           finishFloodfill()
-          await new Promise(resolve => setTimeout(resolve, 1000 / 60))
+          await new Promise(resolve => setTimeout(resolve, 1000 / 60)) // Rhys did this to make it look cooler and not crash the website
           start = performance.now()
         }
     }
