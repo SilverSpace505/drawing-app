@@ -18,7 +18,8 @@ let user = null;
 let profileData = null;
 
 function errorDisplay(error, time = 4) {
-  errorBox.textContent = error.status + ': ' + error.message + '!' //give the error number, message and make it urgent
+  errorBox.textContent = (error.status ? error.status + ': ' : '') + error.message //give the error number, message
+  console.log(errorBox.textContent)
   errorBox.style.bottom = '80%' //show the div
   setTimeout(() => {
     errorBox.style.bottom = '100%' //move it back offscreen
@@ -38,17 +39,22 @@ function logMeIn() {
 function addAccount() {
     if (!email.value || 
         !password.value || 
-        !confirmPW.value ||
-        password.value.length < 6
+        !confirmPW.value
         //these checks are no longer handled by the HTML
         //because of custom buttons
     ) {
+        errorDisplay({message: 'Please fill in all fields.'}, 2)
         console.log('didnt fill it in')
         //don't do anything if not filled in
         return
     }
+    if (password.value.length < 6) {
+      errorDisplay({message: 'Password is too short.'}, 2)
+      return;
+    }
     if (password.value != confirmPW.value) {
         //they should be the same, to ensure no typos are present
+        errorDisplay({message: 'The password confirmation does not match.'}, 2)
         console.log('the password doesnt match')
         return
     }
@@ -62,6 +68,7 @@ function addAccount() {
 function loginHTML() {
   //helper function for doing all the stuff a button onclick should do
     if (!email2.value || !pw2.value) {
+      errorDisplay({message: 'Please fill in all fields.'}, 2)
         console.log('didnt fill it in')
         return
     }
@@ -90,7 +97,8 @@ async function logout() {
   const { error } = await client.auth.signOut()
   //get rid of supabase user - no longer able to fetch anything
   console.log(error)
-  if (!error) accName.innerText = 'Not Signed In'
+  if (error) errorDisplay(error) 
+  else accName.innerText = 'Not Signed In'
 }
 
 async function login(email, password) {
