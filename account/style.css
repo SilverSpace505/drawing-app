@@ -114,6 +114,7 @@ body {
     height: 80px;
     border: 2px solid black;
     border-radius: 40px;
+    cursor: pointer;
 }
 
 .pagelink {

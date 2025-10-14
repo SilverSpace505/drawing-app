@@ -17,6 +17,10 @@ const pfpCtx = pfpCanvas.getContext('2d')
 let user = null;
 let profileData = null;
 
+pfpCanvas.onclick = () => {
+  window.open("../profile/", "_self");
+};
+
 function errorDisplay(error, time = 4) {
   errorBox.textContent = (error.status ? error.status + ': ' : '') + error.message //give the error number, message
   console.log(errorBox.textContent)
