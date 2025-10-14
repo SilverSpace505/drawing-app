@@ -10,6 +10,8 @@ const pw2 = document.getElementById('logInPassword')
 const signUpForm = document.getElementById('signUpContainer')
 const logInForm = document.getElementById('logInContainer')
 const errorBox = document.getElementById('errorBox')
+const pfpCanvas = document.getElementById('pfp')
+const pfpCtx = pfpCanvas.getContext('2d')
 
 //Set up global variables
 let user = null;
@@ -140,16 +142,28 @@ async function createAccount(email, password) {
   }
 }
 
+async function loadPfp(id) {
+  const {data, error} = await client
+  .from('drawings')
+  .select('*') //get all columns
+  .eq('id', id)
+  load(data[0].data, pfpCanvas, pfpCtx)
+}
+
 async function updateUI(data) {
     if (!data) return;
     user = data.user
     if (!user) return
-    if (profileData != null) accName.innerText = profileData.name //no need to fetch twice - rate limits
+    if (profileData != null) {
+      accName.innerText = profileData.name //no need to fetch twice - rate limits
+      loadPfp(profileData.pfp)
+    }
     else accName.innerText = await getName(user.id) /*
     this returns the name, but it also sets profileData so I can use it any other time.
     However, this might be a problem if the user wants to change their name, but for now the profile picture, username, etc. 
     is on a different page, so it will always be a fresh load of my page afterward.
     */
+   
 }
 
 (async() => {
@@ -174,6 +188,7 @@ async function getName(id) {
   }
   console.log(data, data[0])
   if (!data || !data[0]) return user.email;
+  if (data[0].pfp) loadPfp(data[0].pfp)
   profileData = data[0];
   return data[0].name //this needs to be awaited, otherwise since async it will return a Promise
 }

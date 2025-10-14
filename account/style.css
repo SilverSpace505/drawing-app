@@ -50,13 +50,13 @@ body {
 
 #accountName {
     position: absolute;
-    left: 25%;
-    top: 5%;
+    right: 11%;
+    top: 20px;
+    height: 80px;
     font-size: x-large;
-    border: 5px solid black;
     border-radius: 10px;
-    text-align: center;
-    width: 50%;
+    display: flex;
+    align-items: center;
 }
 
 #logoutBtn {
@@ -102,4 +102,31 @@ body {
     transition: 1s all;
     height: 70px;
     text-align: center;
+}
+
+#pfp {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+    border: 2px solid black;
+    border-radius: 40px;
+}
+
+.pagelink {
+    margin: 30px;
+    border: 2px solid black;
+    border-radius: 5px;
+    text-decoration: none;
+    padding: 10px 10px;
+    color: black;
+    background-color: #eee;
+}
+
+#navbar {
+    position: absolute;
+    top: 50px;
+    left: 5%;
+    width: 95%;
 }

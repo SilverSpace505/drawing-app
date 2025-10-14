@@ -7,7 +7,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.1"></script>
 </head>
 <body>
+    <nav id="navbar">
+    <a class='pagelink' href="../dashboard/">Dashboard</a>
+    <a class='pagelink' href="../draw">Draw</a>
+    <a class='pagelink' href="../andrew/">Picture Gallery</a>
+    </nav>
     <div id="accountName">Not Signed In</div>
+    <canvas id="pfp"></canvas>
     <button id="signUp" onclick="signUp()" class="signUpBtn">Sign Up</button>
     <form id="signUpContainer">
 
@@ -36,7 +42,11 @@
     <button id="loginBtn" class="signUpBtn" onclick="logMeIn()" type="button">Log In</button>
     <button id="logoutBtn" class="signUpBtn" onclick="logout()" type="button">Log Out</button>
     <div id="errorBox">Error: Invalid password!</div>
-    
+    <script type="module">
+        import pako from 'https://cdn.jsdelivr.net/npm/pako@2.1.0/+esm'
+        window.pako = pako
+    </script>
+    <script src="../saveload.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
