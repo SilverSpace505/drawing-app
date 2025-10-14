@@ -15,14 +15,14 @@
         <input type="color" id="brushColour" value="#000000"> <!-- Makes a colour wheel and assigns it's hex code to the 'brushColour' ID -->
         
         
-        <div id="widthDiv"><input type="range" min="1" max="10" value="1" class="slider" id="brushSize">Width</div> <!-- Makes a slider and assigns it's integer value to the 'brushSize' ID -->
-        <div id="opacityDiv"><input type="range" min="0" max="100" value="0" class="slider" id="opacity">Transparency</div> <!-- Makes a slider and assigns it's integer value to the 'opacity' ID -->
+        <div style="display: flex;"><input type="range" min="1" max="10" value="1" class="slider" id="brushSize"><div id='widthDiv'>Width</div></div> <!-- Makes a slider and assigns it's integer value to the 'brushSize' ID -->
+        <div style="display: flex;"><input type="range" min="0" max="100" value="0" class="slider" id="opacity"><div id="opacityDiv">Transparency</div></div> <!-- Makes a slider and assigns it's integer value to the 'opacity' ID -->
         <div class="dropdown">
             <button id="toolBtn">Tools</button>
             <div class="dropdown-content">
                 <a onClick="changeTool('pen')" id="pen">Pen</a>
                 <a onClick="changeTool('eraser')" id="eraser">Eraser</a>
-                <a onClick="changeTool('bucket')">Bucket</a>
+                <a onClick="changeTool('bucket')" id="bucket">Bucket</a>
             </div>
         </div>
         <br>
@@ -46,7 +46,8 @@
         <button onclick="undo()">↺</button>
         <button onclick="redo()">↻</button>
         <br>
-        <button onclick="exportImg()">Export as PNG</button>
+        <button onclick="exportImg()" id="exportBtn" title="Make sure to name your creation using the upload name box!">Export as PNG</button>
+        <button onclick="emojify()" id="emoji">😉</button>
         <br>
         
         <canvas id="canvas" width="1800" height="968" style="left:12px; top:100px; border:1px solid black;"></canvas> <!-- The drawing area -->
