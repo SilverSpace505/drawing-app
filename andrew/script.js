@@ -24,7 +24,7 @@ async function getDrawings() {
 
 function makeTheDrawings(){
 const drawArea = document.getElementById('viewDrawings')
-
+drawArea.innerHTML=""
 //show drawing makers name
   //loop over eacg element in the array
   for(var i=0; i<drawData.length;i++){
@@ -41,6 +41,18 @@ const drawArea = document.getElementById('viewDrawings')
   }
 }
 
-
-
-
+async function searchdrawings(){
+var s=document.getElementById("search").value
+ const { data, error } = await supabase
+    .from("drawings")
+    .select("*")
+    .ilike("name",s);
+  if (error){
+     console.error("Error inserting customer:", error);
+  }
+  else {
+    console.log("Customer added:", data);
+    drawData = data;
+  }
+  makeTheDrawings();
+}

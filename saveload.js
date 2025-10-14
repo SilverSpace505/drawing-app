@@ -65,7 +65,7 @@ function load(data, canvas, ctx, override=false) {
             for (var i = 0; i < data[l].length; i++) {
                 if (data[l][i][4] != undefined) {
                     console.log(data[l][i][4])
-                    // rgbToHexConverter(data[l][i][4], data[l][i][6])
+                    rgbToHexConverter(data[l][i][4], data[l][i][6])
                     ctx.beginPath();
                     ctx.moveTo(data[l][i][0], data[l][i][1]);
                     ctx.lineTo(data[l][i][2], data[l][i][3]);
