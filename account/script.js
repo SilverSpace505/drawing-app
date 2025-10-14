@@ -9,10 +9,19 @@ const email2 = document.getElementById('logInEmail')
 const pw2 = document.getElementById('logInPassword')
 const signUpForm = document.getElementById('signUpContainer')
 const logInForm = document.getElementById('logInContainer')
+const errorBox = document.getElementById('errorBox')
 
 //Set up global variables
 let user = null;
 let profileData = null;
+
+function errorDisplay(error, time = 4) {
+  errorBox.textContent = error.status + ': ' + error.message + '!' //give the error number, message and make it urgent
+  errorBox.style.bottom = '80%' //show the div
+  setTimeout(() => {
+    errorBox.style.bottom = '100%' //move it back offscreen
+  }, time * 1000) //time needs to be in ms
+}
 
 function signUp() {
     //Show the form container (CSS allows for smooth animation)
@@ -27,19 +36,21 @@ function logMeIn() {
 function addAccount() {
     if (!email.value || 
         !password.value || 
-        !confirmPW.value
-        //not needed since they all have 'required' but understandable 
+        !confirmPW.value ||
+        password.value.length < 6
+        //these checks are no longer handled by the HTML
+        //because of custom buttons
     ) {
         console.log('didnt fill it in')
         //don't do anything if not filled in
         return
     }
-    console.log('adding')
     if (password.value != confirmPW.value) {
         //they should be the same, to ensure no typos are present
         console.log('the password doesnt match')
         return
     }
+    console.log('adding')
 
     createAccount(email.value, password.value)
     //hide the container
@@ -85,9 +96,16 @@ async function login(email, password) {
     email,
     password
   })
+  if (error2) {
+    errorDisplay(error2)
+    return
+  }
   console.log(data2, error2)
   const {data, error} = await client.auth.getUser()
   console.log(data, error)
+  if (error) {
+    errorDisplay(error)
+  }
   //show logged in user's name on screen
   updateUI(data)
 }
@@ -97,11 +115,9 @@ async function createAccount(email, password) {
     email,
     password
   })
-  
   console.log(data, error)
-  if (error && error.code == "user_already_exists") {
-    console.log('You already have an account! Signing in...')
-    login(email, password)
+  if (error) {
+    errorDisplay(error)
   }
   else {
     user = data.user 
@@ -138,6 +154,11 @@ async function updateUI(data) {
 
 (async() => {
     const {data, error} = await client.auth.getUser() //if user already signed in (I assume with localStorage) then show username right away
+    if (error) {
+      //I don't want to display this one, because it is probably just 
+      // that the session is invalid since the user is not signed in yet
+      //errorDisplay(error)
+    }
     updateUI(data)
     
 })()
@@ -148,7 +169,7 @@ async function getName(id) {
   .select('*') //get all columns
   .eq('id', id) //find the user's profile based on their id/token
   if (error) {
-    console.log(error)
+    errorDisplay(error)
     return;
   }
   console.log(data, data[0])

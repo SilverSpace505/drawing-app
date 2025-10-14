@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accounts</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.1"></script>
 </head>
 <body>
     <div id="accountName">Not Signed In</div>
@@ -28,13 +28,15 @@
         Email: <br><input class="userInput" autocomplete="username" required id="logInEmail">
         <br>
         <br>
-        Password: <br><input class="userInput" type="password" autocomplete="current-password" required id="logInPassword">
+        Password: <br><input class="userInput" type="password" autocomplete="current-password" required id="logInPassword" minlength="6">
         <br>
         <br>
         <button id="logInConfirmBtn" class="signUpBtn" onclick="loginHTML()" type="button">Log In</button>
     </form>
     <button id="loginBtn" class="signUpBtn" onclick="logMeIn()" type="button">Log In</button>
     <button id="logoutBtn" class="signUpBtn" onclick="logout()" type="button">Log Out</button>
+    <div id="errorBox">Error: Invalid password!</div>
+    
     <script src="script.js"></script>
 </body>
 </html>
