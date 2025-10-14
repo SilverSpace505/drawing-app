@@ -145,16 +145,37 @@ loadFileBtn.onclick = () => {
 
 function exportImg() {
   let url = canvas.toDataURL("image/png");
-  let tab = window.open('about:blank', 'Exported Image')
+  //to download: make a temporary <a> and click it
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = `${uploadName.value || 'drawing'}.png`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 
+  //to open in new tab: create a fullscreen <img> in about:blank tab
+  /*
+  console.log(url)
+  let tab = window.open('about:blank')
+  tab.document.head.innerHTML = '<title>Exported Image</title>'
   tab.document.body.innerHTML = `<img src="${url}" style="width: 100%; height: 100%;"/>`
+  */
 }
 
 function emojify() {
   document.getElementById('brushColourLabel').innerText = '🎨'
-  document.getElementById('widthDiv').textContent = '↔'
+  document.getElementById('widthDiv').textContent = '⏪⏩'
   document.getElementById('opacityDiv').textContent = '👓'
   document.getElementById('toolBtn').textContent = '🛠'
   document.getElementById('pen').textContent = '✏'
   document.getElementById('eraser').textContent = '💢'
+  document.getElementById('bucket').textContent = '🥤'
+  //can't change the actual Choose File / No file chosen text since they're native HTML :(
+  loadFileBtn.textContent = '📂'
+  emailDisplay.textContent = '👤: ❓' //I'm not bothered to get the user
+  uploadName.placeholder = '📛'
+  uploadDescription.placeholder = '📝'
+  downloadName.placeholder = '📔'
+  downloadBtn.textContent = '📩'
+  document.getElementById('exportBtn').textContent = '📷'
 }
