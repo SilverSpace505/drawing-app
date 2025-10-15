@@ -46,11 +46,11 @@ async function getDrawings(id) {
   return data;
 }
 
-const account = document.getElementById('account')
+const account = document.getElementById('name')
 
 const drawingsContainer = document.getElementById('drawings')
 
-account.onclick = () => {
+pfp.onclick = () => {
   window.open('../profile', '_self')
 }
 

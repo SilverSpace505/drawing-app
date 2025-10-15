@@ -9,7 +9,15 @@
 
     </style> -->
     <body>
-        
+      <img src="../drawing.png" alt="">
+        <div id="topbar">
+          <button id="dashboardBtn">Dashboard</button>
+          <div id="right">
+            <div id="emailDisplay"></div>
+            <canvas id="pfp"></canvas>
+          </div>
+        </div>
+        <div style="height: 80px;"></div>
 
         <label for="brushColour" id="brushColourLabel">Colour:</label> <!-- The brush colour -->
         <input type="color" id="brushColour" value="#000000"> <!-- Makes a colour wheel and assigns it's hex code to the 'brushColour' ID -->
@@ -30,10 +38,6 @@
         <input type="file" name="load" id="loadFile">
         <button id="loadFileBtn">Load File</button>
         <br>
-
-        <div id="emailDisplay">User: </div>
-        <canvas id="pfp"></canvas>
-        <br>
         <br>
 
         <input type="text" placeholder="name" id="uploadName">
@@ -48,6 +52,7 @@
         <br>
         <button onclick="exportImg()" id="exportBtn" title="Make sure to name your creation using the upload name box!">Export as PNG</button>
         <button onclick="emojify()" id="emoji">😉</button>
+        <br>
         <br>
         
         <canvas id="canvas" width="1800" height="968" style="left:12px; top:100px; border:1px solid black;"></canvas> <!-- The drawing area -->
