@@ -32,12 +32,20 @@ drawArea.innerHTML=""
     const div=document.createElement("div")
     const canvas = document.createElement('canvas')
     div.classList.add('drawing')  
+    canvas.classList.add('drawing-canvas')
     const title=document.createElement("span") 
+    title.classList.add('drawing-title')
     title.textContent=drawData[i].name 
-    div.append(title)
     div.append(canvas);
     drawArea.append(div)
     load(drawData[i].data, canvas, canvas.getContext('2d'))
+
+    //silver code
+    const textDiv = document.createElement('div')
+    textDiv.classList.add('textDiv')
+
+    textDiv.append(title)
+    div.append(textDiv)
   }
 }
 
@@ -55,4 +63,10 @@ var s=document.getElementById("search").value
     drawData = data;
   }
   makeTheDrawings();
+}
+
+//silver code
+const dashboardBtn = document.getElementById('dashboardBtn')
+dashboardBtn.onclick = () => {
+  window.open('../dashboard', '_self')
 }

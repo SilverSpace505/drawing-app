@@ -70,10 +70,15 @@ function displayDrawings(drawings, parentElement) {
     const canvas = document.createElement('canvas')
     canvas.classList.add('drawing-canvas')
 
+    const textDiv = document.createElement('div')
+    textDiv.classList.add('textDiv')
+
     element.appendChild(canvas)
-    element.appendChild(title)
-    element.appendChild(description)
-    element.appendChild(document.createElement('br'))
+    textDiv.appendChild(title)
+    textDiv.appendChild(document.createElement('br'))
+    textDiv.appendChild(description)
+
+    element.appendChild(textDiv)
     
     parentElement.appendChild(element)
 
@@ -115,3 +120,8 @@ const drawingsContainer = document.getElementById('drawings');
 
   displayDrawings(drawings, drawingsContainer)
 })()
+
+const dashboardBtn = document.getElementById('dashboardBtn')
+dashboardBtn.onclick = () => {
+  window.open('../dashboard', '_self')
+}

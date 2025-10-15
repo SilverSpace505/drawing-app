@@ -51,7 +51,7 @@ const account = document.getElementById('account')
 const drawingsContainer = document.getElementById('drawings')
 
 account.onclick = () => {
-  window.open('../profile')
+  window.open('../profile', '_self')
 }
 
 const {data} = await client.auth.getUser()
@@ -100,7 +100,7 @@ function displayDrawings(drawings, parentElement) {
     parentElement.appendChild(element)
 
     canvas.onclick = () => {
-      window.open(`../draw/?load=${drawing.id}`)
+      window.open(`../draw/?load=${drawing.id}`, '_self')
     }
 
     load(drawing.data, canvas, canvas.getContext('2d'))
@@ -128,10 +128,20 @@ if (data.user) {
 }
 
 accountsBtn.onclick = () => {
-  window.open('../account')
+  window.open('../account', '_self')
 }
 
 const newBtn = document.getElementById('newBtn')
 newBtn.onclick = () => {
-  window.open('../draw')
+  window.open('../draw', '_self')
+}
+
+const exploreBtn = document.getElementById('exploreBtn') 
+exploreBtn.onclick = () => {
+  window.open('../andrew', '_self')
+}
+
+const accountBtn = document.getElementById('accountBtn')
+accountBtn.onclick = () => {
+  window.open('../account', '_self')
 }

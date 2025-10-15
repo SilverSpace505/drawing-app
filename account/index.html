@@ -7,13 +7,18 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.1"></script>
 </head>
 <body>
+    <img src="../drawing.png" alt="">
     <nav id="navbar">
-    <a class='pagelink' href="../dashboard/">Dashboard</a>
-    <a class='pagelink' href="../draw">Draw</a>
-    <a class='pagelink' href="../andrew/">Picture Gallery</a>
+    <a class='pagelink' id='dashboardLink' href="../dashboard/">Dashboard</a>
+    <a class='pagelink' id='drawLink' href="../draw">Draw</a>
+    <a class='pagelink' id='andrewLink' href="../andrew/">Picture Gallery</a>
+
+    <div id="right">
+      <div id="accountName">Not Signed In</div>
+      <canvas id="pfp"></canvas>
+    </div>
     </nav>
-    <div id="accountName">Not Signed In</div>
-    <canvas id="pfp"></canvas>
+   
     <button id="signUp" onclick="signUp()" class="signUpBtn">Sign Up</button>
     <form id="signUpContainer">
 
@@ -37,7 +42,7 @@
         Password: <br><input class="userInput" type="password" autocomplete="current-password" required id="logInPassword" minlength="6">
         <br>
         <br>
-        <button id="logInConfirmBtn" class="signUpBtn" onclick="loginHTML()" type="button">Log In</button>
+        <button id="logInConfirmBtn" class="loginBtn" onclick="loginHTML()" type="button">Log In</button>
     </form>
     <button id="loginBtn" class="signUpBtn" onclick="logMeIn()" type="button">Log In</button>
     <button id="logoutBtn" class="signUpBtn" onclick="logout()" type="button">Log Out</button>
