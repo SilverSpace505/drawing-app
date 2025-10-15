@@ -168,6 +168,10 @@ async function loadPfp(id) {
   .from('drawings')
   .select('*') //get all columns
   .eq('id', id)
+  if (error) {
+    errorDisplay(error, 2)
+    return;
+  }
   load(data[0].data, pfpCanvas, pfpCtx)
 }
 
