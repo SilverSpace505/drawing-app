@@ -30,6 +30,10 @@ function errorDisplay(error, time = 4) {
   }, time * 1000) //time needs to be in ms
 }
 
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 function signUp() {
     //Show the form container (CSS allows for smooth animation)
     signUpForm.style.top = '15%'
@@ -61,6 +65,10 @@ function addAccount() {
         errorDisplay({message: 'The password confirmation does not match.'}, 2)
         console.log('the password doesnt match')
         return
+    }
+    if (!isValidEmail(email.value)) {
+      errorDisplay({message: 'Invalid email address.'}, 2)
+      return;
     }
     console.log('adding')
 
@@ -149,6 +157,7 @@ async function createAccount(email, password) {
     .select()
     console.log(d, e)
     //show the user's name onscreen
+    profileData = null;
     updateUI(data)
 
   }
