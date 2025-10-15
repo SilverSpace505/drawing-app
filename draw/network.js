@@ -70,7 +70,7 @@ async function loadPfp(id) {
   const {data} = await client.auth.getUser();
 
   (async() => {
-    if (data.user) emailDisplay.textContent = 'User: ' + await getName(data.user.id);
+    if (data.user) emailDisplay.textContent = await getName(data.user.id);
   })();
 
   let params = new URLSearchParams(document.location.search);
@@ -178,4 +178,13 @@ function emojify() {
   downloadName.placeholder = '📔'
   downloadBtn.textContent = '📩'
   document.getElementById('exportBtn').textContent = '📷'
+}
+
+pfp.onclick = () => {
+  window.open('../profile', '_self')
+}
+
+const dashboardBtn = document.getElementById('dashboardBtn')
+dashboardBtn.onclick = () => {
+  window.open('../dashboard', '_self')
 }

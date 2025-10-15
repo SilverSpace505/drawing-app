@@ -28,11 +28,13 @@ var colour = [];
 
 var filledPixels = []
 
-document.addEventListener('mousemove', function(event) { // Detects when the mouse moves
+let scale = 1;
+
+canvas.addEventListener('mousemove', function(event) { // Detects when the mouse moves
     lastMouseX = mouseX; // Stores the previous mouse position
     lastMouseY = mouseY; // Stores the previous mouse position
-    mouseX = event.clientX - canvas.getBoundingClientRect().left; // Sets the mouse position to a variable. The mouse position is offset by the canvas position 
-    mouseY = event.clientY - canvas.getBoundingClientRect().top; // because 'event.clientY' is based off of the canvas position rather than the absolute position.
+    mouseX = (event.clientX - canvas.getBoundingClientRect().left) / scale; // Sets the mouse position to a variable. The mouse position is offset by the canvas position 
+    mouseY = (event.clientY - canvas.getBoundingClientRect().top) / scale; // because 'event.clientY' is based off of the canvas position rather than the absolute position.
     addToCanvas()
 });
 
@@ -246,3 +248,17 @@ function finishFloodfill() {
 
 
 document.addEventListener('contextmenu', e => e.preventDefault()) // Removes right click menu - done by Sam
+
+
+//silver code
+window.onresize = () => {
+  const scalex = (window.innerWidth - 20) / 1800
+  const scaley = (window.innerHeight - 400) / 968
+
+  scale = Math.min(scalex, scaley)
+
+  canvas.style.width = (1800 * scale) + 'px'
+  canvas.style.height = (968 * scale) + 'px'
+}
+
+window.onresize()
