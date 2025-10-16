@@ -19,43 +19,48 @@
         </div>
         <div style="height: 80px;"></div>
 
-        <label for="brushColour" id="brushColourLabel">Colour:</label> <!-- The brush colour -->
-        <input type="color" id="brushColour" value="#000000"> <!-- Makes a colour wheel and assigns it's hex code to the 'brushColour' ID -->
-        
-        
-        <div style="display: flex;"><input type="range" min="1" max="10" value="1" class="slider" id="brushSize"><div id='widthDiv'>Width</div></div> <!-- Makes a slider and assigns it's integer value to the 'brushSize' ID -->
-        <div style="display: flex;"><input type="range" min="0" max="100" value="0" class="slider" id="opacity"><div id="opacityDiv">Transparency</div></div> <!-- Makes a slider and assigns it's integer value to the 'opacity' ID -->
-        <div class="dropdown">
-            <button id="toolBtn">Tools</button>
-            <div class="dropdown-content">
-                <a onClick="changeTool('pen')" id="pen">Pen</a>
-                <a onClick="changeTool('eraser')" id="eraser">Eraser</a>
-                <a onClick="changeTool('bucket')" id="bucket">Bucket</a>
+        <div style="display:flex">
+            <div>
+                <label for="brushColour" id="brushColourLabel">Colour:</label> <!-- The brush colour -->
+                <input type="color" id="brushColour" value="#000000"> <!-- Makes a colour wheel and assigns it's hex code to the 'brushColour' ID -->
+                
+                
+                <div style="display: flex;"><input type="range" min="1" max="10" value="1" class="slider" id="brushSize"><div id='widthDiv'>Width</div></div> <!-- Makes a slider and assigns it's integer value to the 'brushSize' ID -->
+                <div style="display: flex;"><input type="range" min="0" max="100" value="0" class="slider" id="opacity"><div id="opacityDiv">Transparency</div></div> <!-- Makes a slider and assigns it's integer value to the 'opacity' ID -->
+                <div class="dropdown">
+                    <button id="toolBtn">Tools</button>
+                    <div class="dropdown-content">
+                        <a onClick="changeTool('pen')" id="pen">Pen</a>
+                        <a onClick="changeTool('eraser')" id="eraser">Eraser</a>
+                        <a onClick="changeTool('bucket')" id="bucket">Bucket</a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <input type="file" name="load" id="loadFile">
+                <button id="loadFileBtn">Load File</button>
+                <br>
+                <br>
+
+                <input type="text" placeholder="name" id="uploadName">
+                <input type="text" placeholder="description" id="uploadDescription">
+                <button id="uploadBtn">Upload</button>
+                <br>
+                <input type="text" placeholder="download name" id="downloadName">
+                <button id="downloadBtn">Download</button>
+                <br>
+            </div>
+            <div>
+                <button onclick="undo()">↺</button>
+                <button onclick="redo()">↻</button>
+                <button onclick="exportImg()" id="exportBtn" title="Make sure to name your creation using the upload name box!">Export as PNG</button>
+                <button onclick="emojify()" id="emoji">😉</button>
             </div>
         </div>
-        <br>
-        <br>
-        <input type="file" name="load" id="loadFile">
-        <button id="loadFileBtn">Load File</button>
-        <br>
-        <br>
 
-        <input type="text" placeholder="name" id="uploadName">
-        <input type="text" placeholder="description" id="uploadDescription">
-        <button id="uploadBtn">Upload</button>
-        <br>
-        <input type="text" placeholder="download name" id="downloadName">
-        <button id="downloadBtn">Download</button>
-        <br>
-        <button onclick="undo()">↺</button>
-        <button onclick="redo()">↻</button>
-        <br>
-        <button onclick="exportImg()" id="exportBtn" title="Make sure to name your creation using the upload name box!">Export as PNG</button>
-        <button onclick="emojify()" id="emoji">😉</button>
-        <br>
         <br>
         
-        <canvas id="canvas" width="1800" height="968" style="left:12px; top:100px; border:1px solid black;"></canvas> <!-- The drawing area -->
+        <canvas id="canvas" width="1800" height="968" style="border:1px solid black;"></canvas> <!-- The drawing area -->
 
         <link rel="stylesheet" href="style.css"> 
 
