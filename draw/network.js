@@ -1,4 +1,5 @@
 
+// connect to supabase
 const { createClient } = supabase;
 const supabaseUrl = 'https://hfbnrnmfhierhtlhcute.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmYm5ybm1maGllcmh0bGhjdXRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0NjI3NTQsImV4cCI6MjA3MzAzODc1NH0.1MJcf4GxfhBP4qLzJuTvnh4iOr2ELjZ2YrXxKnO-AiM'
@@ -7,6 +8,7 @@ const client = createClient(supabaseUrl, supabaseKey);
 const pfpCanvas = document.getElementById('pfp')
 const pfpCtx = pfpCanvas.getContext('2d')
 
+// add drawing into supabase drawings table
 async function createDrawing(name, data, description = null) {
   const { data2, error } = await client
   .from('drawings')
@@ -21,6 +23,7 @@ const uploadBtn = document.getElementById('uploadBtn')
 const uploadName = document.getElementById('uploadName')
 const uploadDescription = document.getElementById('uploadDescription')
 
+// upload the drawing data with the name and description to supabase
 uploadBtn.onclick = async () => {
   createDrawing(uploadName.value, save(), uploadDescription.value)
 }
@@ -28,6 +31,7 @@ uploadBtn.onclick = async () => {
 const downloadBtn = document.getElementById('downloadBtn')
 const downloadName = document.getElementById('downloadName')
 
+// get the drawing with the target name and load it onto the canvas
 downloadBtn.onclick = async() => {
   const { data } = await client
   .from('drawings')
@@ -41,6 +45,7 @@ downloadBtn.onclick = async() => {
 
 const emailDisplay = document.getElementById('emailDisplay');
 
+// gets the name property from user's profile using their id
 async function getName(id) {
   const {data, error} = await client
   .from('profiles')
@@ -53,11 +58,13 @@ async function getName(id) {
 
   if (!data || !data[0]) return 'No name set';
 
+  // if they have a profile picture set, then load it
   if (data[0].pfp) loadPfp(data[0].pfp)
 
   return data[0].name
 }
 
+// loads the drawing with the id and draws it on the canvas for the profile picture
 async function loadPfp(id) {
   const {data, error} = await client
   .from('drawings')
@@ -67,15 +74,19 @@ async function loadPfp(id) {
 }
 
 (async() => { 
+  // get authentication status
   const {data} = await client.auth.getUser();
 
   (async() => {
+    // if logged in, then display the user's profile name
     if (data.user) emailDisplay.textContent = await getName(data.user.id);
   })();
 
+  // get the load id parameter from the url
   let params = new URLSearchParams(document.location.search);
   let loadId = params.get("load");
 
+  // if there is a drawing to load, fetch it and load it onto the canvas
   if (loadId) {
     const { data } = await client
     .from('drawings')
@@ -99,6 +110,7 @@ function rgbaToHex(r, g, b, a = 1) {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}${toHex(alpha)}`;
 }
 
+// broken
 loadFileBtn.onclick = () => {
   const img = new Image();
   img.onload = function() {

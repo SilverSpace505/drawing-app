@@ -1,4 +1,5 @@
 
+// connect to supabase
 const { createClient } = supabase;
 const supabaseUrl = 'https://hfbnrnmfhierhtlhcute.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmYm5ybm1maGllcmh0bGhjdXRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0NjI3NTQsImV4cCI6MjA3MzAzODc1NH0.1MJcf4GxfhBP4qLzJuTvnh4iOr2ELjZ2YrXxKnO-AiM'
@@ -12,12 +13,18 @@ let pfp = null;
 let selected = null;
 
 (async() => {
+  // get authentication status
   const {data} = await client.auth.getUser()
+
+  // if logged in
   if (data.user) {
     emailDisplay.textContent = 'Email: ' + data.user.email
     userId = data.user.id
 
+    // get profile data using userId
     const {data: data2, error} = await client.from('profiles').select().eq('id', userId)
+
+    // if profile data exists, then display it
     if (data2 && data2[0]) {
       hasProfile = true
       nameInput.value = data2[0].name
@@ -29,14 +36,17 @@ let selected = null;
   }
 })()
 
+// if the user has a profile, then just update it, otherwise, upload a new row into supabase for the user's profile
 async function updateProfile() {
   if (hasProfile) {
+    // update existing row in profiles table
     const { data, error } = await client
     .from('profiles')
     .update({ name: nameInput.value, description: descriptionInput.value, pfp })
     .eq('id', userId)
     .select()
   } else {
+    // intsert new row into profiles table
     const { data, error } = await client
     .from('profiles')
     .insert([
@@ -47,6 +57,7 @@ async function updateProfile() {
   }
 }
 
+// get all drawings
 async function getDrawings() {
   const {data, error} = await client
   .from('drawings')
@@ -54,7 +65,9 @@ async function getDrawings() {
   return data;
 }
 
+// creates all the elements for the drawings
 function displayDrawings(drawings, parentElement) {
+  // for each drawing in the drawing data, create a new series of elements
   for (const drawing of drawings) {
     const element = document.createElement('div')
     element.classList.add('drawing')
@@ -82,17 +95,23 @@ function displayDrawings(drawings, parentElement) {
     
     parentElement.appendChild(element)
 
+    // when the drawing is clicked, update pfp variable and upload to supbase
     element.onclick = () => {
+      // update profile picture property to this drawing
       pfp = drawing.id
+
       if (selected) selected.remove()
       const box = document.createElement('div')
       box.classList.add('selected')
       box.innerText = '✔'
       element.appendChild(box)
       selected = box
+
+      // upload change to supabase
       updateProfile()
     }
 
+    // if this is the selected drawing, show it
     if (pfp == drawing.id) {
       const box = document.createElement('div')
       box.classList.add('selected')
@@ -101,6 +120,7 @@ function displayDrawings(drawings, parentElement) {
       selected = box
     }
 
+    // load drawing data onto canvas
     load(drawing.data, canvas, canvas.getContext('2d'))
   }
 }
@@ -109,6 +129,7 @@ const nameInput = document.getElementById('name')
 const descriptionInput = document.getElementById('description')
 const updateBtn = document.getElementById('updateBtn')
 
+// when the update button is clicked, upload the profile data to supabase
 updateBtn.onclick = () => {
   updateProfile()
 }
@@ -116,8 +137,10 @@ updateBtn.onclick = () => {
 const drawingsContainer = document.getElementById('drawings');
 
 (async() => {
+  // get all drawings
   const drawings = await getDrawings()
 
+  // display them
   displayDrawings(drawings, drawingsContainer)
 })()
 
