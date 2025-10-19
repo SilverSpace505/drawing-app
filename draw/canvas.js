@@ -25,7 +25,7 @@ var colour = [];
 
 var filledPixels = []; // Used by the filling tool
 
-let scale = 1;
+let scale = 1; // Rhys added 'scale' for the UI scaling
 
 canvas.addEventListener('mousemove', function(event) { // Detects when the mouse moves
     lastMouseX = mouseX; // Stores the previous mouse position
