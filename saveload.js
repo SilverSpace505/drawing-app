@@ -59,10 +59,12 @@ function load(data, canvas, ctx, override=false) {
     ctx.save()
     ctx.scale(canvas.width / 1800, canvas.height / 968)
     // HENRY CODE STARTS HERE
-    for (var l = 0; l < data.length; l++) { // Redraws each line one by one with the same parameters with which they were initially drawn
+    for (var l = 0; l < data.length; l++) { // The same code as 'canvas.js's 'draw()', 'erase()' and 'fill()' functions, but with the parameters being gotten from
+        // the dataset rather than from various variables. See 'canvas.js' for more detailed comments.
         if (data[l][0] == "pen") {
             ctx.globalCompositeOperation = "source-over";
-            for (var i = 0; i < data[l].length; i++) {
+            for (var i = 0; i < data[l].length; i++) { // Because 'data' is formatted by storing each pen stroke, which itself stores the mouse position every
+                // frame, 'l' represents the current mouse stroke and 'i' represents the current frame.
                 if (data[l][i][4] != undefined) {
                     console.log(data[l][i][4])
                     rgbToHexConverter(data[l][i][4], data[l][i][6])

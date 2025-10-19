@@ -1,9 +1,5 @@
 // HENRY CODE STARTS HERE
 
-// TO-DO LIST:
-// Add redo button
-// Make turning smoother with a high width
-
 const brushColour = document.getElementById("brushColour");
 const brushSize = document.getElementById("brushSize");
 const brushOpacity = document.getElementById("opacity");
@@ -13,20 +9,21 @@ const ctx = canvas.getContext("2d", {willReadFrequently: true}); //
 var tool = 'pen';
 var drawing = false;
 var size = 1;
-var redoStorage = [];
+var redoStorage = []; // Used in undoing/redoing.
 
 // Line start position x, line start position y, line end position x, line end position y, colour, size, tool
 var canvasData = [[]]; // Stores each mouse stroke in it's own array. The final index is always a blank array.
-var canvasDataBreaks = 0; // Variable used to control the length of 'canvasData'
+var canvasDataBreaks = 0; // Variable used to control the length of 'canvasData'. I don't remember why this is used rather than 'canvasData.length', but I'm scared
+// to change it. If it works, it works.
 
-var mouseX;
+var mouseX; // The current mouse position
 var mouseY;
-var lastMouseX;
+var lastMouseX; // The mouse's position last frame
 var lastMouseY;
 
 var colour = [];
 
-var filledPixels = []
+var filledPixels = []; // Used by the filling tool
 
 let scale = 1;
 
@@ -58,11 +55,11 @@ function undo() {
     canvasData.splice(canvasDataBreaks - 1, 1); // Because the final index is always a blank array, this erases the last array which actually has data
     redoStorage.push(undone); // Pushing 'undone' into 'redoStorage' puts all of the data in a single index, which makes it easier to handle
     canvasDataBreaks -= 1; 
-    load(compressJSON(canvasData), canvas, ctx, true); // Loads the canvas, now with everything up to the 2nd most recent 'RELEASE' deleted
+    load(compressJSON(canvasData), canvas, ctx, true); // Loads the canvas, now with 'undone' deleted
 }
 
 function redo() {
-    canvasData.splice(canvasData.length - 1, 0, redoStorage[(redoStorage.length - 1)])
+    canvasData.splice(canvasData.length - 1, 0, redoStorage[(redoStorage.length - 1)]) // Adds the most recent index of 'redoStorage' to the end of 'canvasData'.
     redoStorage.splice(redoStorage.length - 1, 1); // Removes 'undone' from 'redoStorage'
     canvasDataBreaks += 1;
     load(compressJSON(canvasData), canvas, ctx, true); // Loads the canvas, now with the 'undone' data added
@@ -96,7 +93,7 @@ onmouseup = function(event) { // This is called when the mouse is released. 'eve
         }
         drawing = false;
         if (canvasData.length - 1 < canvasDataBreaks && canvasData[canvasData.length - 1] != []) {
-            canvasData.push([]);
+            canvasData.push([]); // Assures that the end of 'canvasData' is always a blank array
         };
     };
 };
@@ -111,7 +108,7 @@ function addToCanvas() {
         erase();
     }
     else if (tool == "bucket") {
-        ctx.globalCompositeOperation = "source-over";
+        ctx.globalCompositeOperation = "source-over"; // Sets the built-in 'canvas drawing mode' to it's default
         fill();
     }
 }
@@ -125,31 +122,30 @@ function draw() {
         ctx.lineWidth = brushSize.value; // Width of the line
         ctx.lineCap = "round"; // Makes the lines appear circular and makes wide lines cleaner
         ctx.stroke();
-        if (colour[3] != 1) {
-            // console.log("sdsd")
-            // ctx.globalCompositeOperation = "luminosity";
-            ctx.globalCompositeOperation = "destination-out";
+        if (colour[3] != 1) { // If the user is modifying the transperancy, this makes it so a small circle is erased on the player's mouse position every frame,
+            // because otherwise, 
+            ctx.globalCompositeOperation = "destination-out"; // Sets the built-in 'canvas drawing mode' to only draw on top of existing elements
             ctx.beginPath()
-            ctx.arc(mouseX, mouseY, brushSize.value/2, 0, 2*Math.PI)
-            ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+", "+1+")"
+            ctx.arc(mouseX, mouseY, brushSize.value/2, 0, 2*Math.PI) // Makes the radius equal to half the width, and the circumference equal to 2(PI)r
+            ctx.fillStyle = "rgba(0,0,0+1)" // Makes the circle transperant
             ctx.fill();
-            // ctx.stroke();
-            // x + x * (1 - x)
         }
-        canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value, brushOpacity.value]); // Pushes the line parameters to the data for saving/loading
+        canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value, brushOpacity.value]);
+        // ^Pushes the line parameters to the data for saving/loading
     };
 };
 
 function erase() {
     if (drawing == true) {
         ctx.beginPath();
-        ctx.moveTo(lastMouseX, lastMouseY);
-        ctx.lineTo(mouseX, mouseY);
+        ctx.moveTo(lastMouseX, lastMouseY); // Start position for the line
+        ctx.lineTo(mouseX, mouseY); // End position for the line
         ctx.strokeStyle = "rgba(0,0,0,1)"; // The only important parameter here is 'a = 1' to make the eraser draw transparent lines
         ctx.lineWidth = brushSize.value; // Rest of the parameters are the same as in 'draw()'
         ctx.lineCap = "round";
         ctx.stroke();
         canvasData[canvasDataBreaks].push([lastMouseX, lastMouseY, mouseX, mouseY, brushColour.value, brushSize.value])
+        // ^Pushes the eraser parameters to the data for saving/loading
     }
 };
 
@@ -158,9 +154,10 @@ function fill() {
         var drawCoords = [mouseX, mouseY]
         filledPixels = []
         canvasData[canvasData.length - 1].push([drawCoords[0], drawCoords[1], getPixelColour(drawCoords[0], drawCoords[1])])
+        // ^Pushes the eraser parameters to the data for saving/loading
 
-        // getOrthogonalPixels(drawCoords[0], drawCoords[1], null, getPixelColour(drawCoords[0], drawCoords[1])) // 'getOrthogonalPixels' detects all pixels which need to be filled, though it is quite buggy
-        floodFill(drawCoords[0], drawCoords[1], getPixelColour(drawCoords[0], drawCoords[1])) // 'floodFill' is like 'getOrthogonalPixels' but made by ChatGPT and more optimized 
+        floodFill(drawCoords[0], drawCoords[1], getPixelColour(drawCoords[0], drawCoords[1]))
+        // ^'floodFill' is like 'getOrthogonalPixels' but made by ChatGPT and more optimized 
 
         ctx.fillStyle = "rgba("+colour[0]+", "+colour[1]+", "+colour[2]+")";
         for (i = 0; i < filledPixels.length - 1; i++) {
@@ -178,6 +175,7 @@ function getPixelColour(x, y) {
 }
 // ChatGPT CODE ENDS HERE
 
+// My attempt at filling, which (unsurprisingly) had recursion errors:
 // function getOrthogonalPixels(x, y, ignore, colour) {
     
 //     if (colour == getPixelColour(x + 1, y) && ignore != 2 && filledPixels.includes(x + " " + (y + 1)) == false) {
@@ -242,7 +240,7 @@ function finishFloodfill() {
   for (i = 0; i < filledPixels.length - 1; i++) {
       var intCoords = filledPixels[i].split(" ")
       // console.log(intCoords)
-      ctx.fillRect(intCoords[0], intCoords[1], 1, 1)
+      ctx.fillRect(intCoords[0], intCoords[1], 1, 1) // Draws squares on all of the coordinated calculated by 'FloodFill()'
   }
 }
 
