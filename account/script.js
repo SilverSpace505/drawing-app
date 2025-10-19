@@ -30,7 +30,7 @@ function errorDisplay(error, time = 4) {
   }, time * 1000) //time needs to be in ms
 }
 
-function isValidEmail(email) {
+function isValidEmail(email) { //Complex RegExp made by AI
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
@@ -46,6 +46,7 @@ function logMeIn() {
 
 function addAccount() {
     if (!email.value || 
+        !username.value ||
         !password.value || 
         !confirmPW.value
         //these checks are no longer handled by the HTML
@@ -108,9 +109,13 @@ const client = createClient(supabaseUrl, supabaseKey);
 async function logout() {
   const { error } = await client.auth.signOut()
   //get rid of supabase user - no longer able to fetch anything
+  user = null;
   console.log(error)
   if (error) errorDisplay(error) 
-  else accName.innerText = 'Not Signed In'
+  else {
+    accName.innerText = 'Not Signed In'
+    pfpCtx.clearRect(0, 0, pfpCanvas.width, pfpCanvas.height)
+  }
 }
 
 async function login(email, password) {
